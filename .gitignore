@@ -1,3 +1,4 @@
-
-Binaires/*
 Source/*.bat
+Source/*.log
+Binaries/*
+Source/CompileTools.bat
