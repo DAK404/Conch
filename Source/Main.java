@@ -2,7 +2,7 @@ public class Main
 {
     public static void main(String[] args) 
     {
-        System.out.println("Booting Conch... OK");
+        System.out.println("Booting Conch...");
         new Conch.Core.Loader().loadLogic();
     }
 }
