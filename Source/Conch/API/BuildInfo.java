@@ -3,20 +3,20 @@ package Conch.API;
 /**
  * A program to print the version and information of the shell
  * Contains methods to clear the screen, based on the OS
- * 
+ *
  * @author Deepak Anil Kumar (@DAK404)
  * @version 1.0
  * @since 0.0.1
  */
-public class BuildInfo 
+public class BuildInfo
 {
     public static String _Branding = """
     __     ____  ___   _   _   ____  _   _    __
     \\ \\   / ___|/ _ \\ | \\ | | / ___|| | | |  / /
-     \\ \\ | |   | | | ||  \\| || |    | |_| | / / 
-     / / | |___| |_| || |\\  || |___ |  _  | \\ \\ 
+     \\ \\ | |   | | | ||  \\| || |    | |_| | / /
+     / / | |___| |_| || |\\  || |___ |  _  | \\ \\
     /_/   \\____|\\___/ |_| \\_| \\____||_| |_|  \\_\\
-                                                
+
     """;
 
     public static String _Version = "0.0.1";

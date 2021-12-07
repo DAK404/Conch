@@ -44,6 +44,10 @@ public class Loader
 
     private void debugLoad()
     {
+        //Testing Links for Modules
+        Conch.API.Fish.ReadFile ReadObj = new Conch.API.Fish.ReadFile();
+        Conch.API.Fish.WriteFile WriteObj = new Conch.API.Fish.WriteFile();
+
         Conch.API.BuildInfo.viewBuildInfo();
         System.out.println("Program Loader Started Successfully.");
         checkFiles();

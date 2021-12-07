@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.nio.file.Paths;
 import java.util.*;
 import java.text.*;
 
@@ -107,5 +106,5 @@ public final class WriteFile {
         }
     }
 
-    
+
 }
