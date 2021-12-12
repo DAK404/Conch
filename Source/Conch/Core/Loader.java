@@ -37,17 +37,17 @@ public class Loader
         }
     }
 
-    public void loadLogic()
+    public void loadLogic() throws Exception
     {
         debugLoad();
     }
 
-    private void debugLoad()
+    private void debugLoad() throws Exception
     {
         //Testing Links for Modules
         Conch.API.Fish.ReadFile ReadObj = new Conch.API.Fish.ReadFile();
         Conch.API.Fish.WriteFile WriteObj = new Conch.API.Fish.WriteFile();
-	Conch.API.PolicyEnforce PolicyObj = new Conch.API.PolicyEnforce();
+        Conch.API.Oyster.PolicyManager PolicyObj = new Conch.API.Oyster.PolicyManager();
 
         Conch.API.BuildInfo.viewBuildInfo();
         System.out.println("Program Loader Started Successfully.");
