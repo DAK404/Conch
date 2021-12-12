@@ -2,43 +2,33 @@ package Conch.API;
 
 public class PrintStreams
 {
-    //TODO: Fill in the colors for the print streams, check the Lamatshu implementation of the same
-    private String[] pallette =  {};
-    public static void printError()
-    {
+    private static String _error = "[    ERROR    ] : ";
+    private static String _warning = "[   WARNING   ] : ";
+    private static String _attention = "[  ATTENTION  ] : ";
+    private static String _info = "[ INFORMATION ] : ";
 
+    public static void printError(String _message)
+    {
+        System.out.println(_error + _message);        
     }
 
-    public static void printWarning()
+    public static void printWarning(String _message)
     {
-
+        System.out.println(_warning + _message);
     }
 
-    public static void printCritical()
+    public static void printCritical(String _message)
     {
-
+        System.out.println(_attention + _message);
     }
 
-    public static void print(String text, String color)
+    public static void printInfo(String _message)
     {
-        String tempColor = "";
-        /*
-        switch(color)
-        {
-            case "RED":
-            tempColor = pallette[indexNo];
-            .
-            .
-            .
-            default:
-            tempColor = pallette[WhiteColorIndexNo];
-        }
-        System.out.println(<colorNo> + text + <endingCharCode>);
-        */
+        System.out.println(_info + _message);
     }
 
-    public static void println()
+    public static void printMsg(String _message)
     {
-
+        System.out.println(_message);
     }
 }

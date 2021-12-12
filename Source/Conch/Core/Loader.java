@@ -78,6 +78,15 @@ public class Loader
         String input = console.readLine("~DBG@CONCH: ");
         switch(input)
         {
+
+            case "test print":
+                Conch.API.PrintStreams.printMsg("Hello World!");
+                Conch.API.PrintStreams.printInfo("Hello World!");
+                Conch.API.PrintStreams.printWarning("Hello World!");
+                Conch.API.PrintStreams.printError("Hello World!");
+                Conch.API.PrintStreams.printCritical("Hello World!");
+                break;
+
             case "exit":
                 return false;
 
