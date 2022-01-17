@@ -16,12 +16,11 @@ public class BuildInfo
      \\ \\ | |   | | | ||  \\| || |    | |_| | / /
      / / | |___| |_| || |\\  || |___ |  _  | \\ \\
     /_/   \\____|\\___/ |_| \\_| \\____||_| |_|  \\_\\
-
     """;
 
-    public static String _Version = "0.0.1";
-    public static String _BuildDate = "$dyn_date_info_missing";
-    public static String _BuildID = "$dyn_ID_info_missing";
+    public static String _Version = "0.0.73";
+    public static String _BuildDate = "14-Jan-2022";
+    public static String _BuildID = "NION_14_JAN_22_0842_DEBUG";
     public static String _BuildType = "DEBUG";
 
     public static void viewBuildInfo()
