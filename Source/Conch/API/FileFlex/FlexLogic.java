@@ -174,32 +174,64 @@ public class FlexLogic
     // LOGIC TO COPY/MOVE A FILE OR DIRECTORY
     ///////////////////////////////////////////////////////////////
 
-    private final void copyMoveFile(boolean move, String sourceFile, String destinationFile)throws Exception
+    private final void copyMove(boolean move, String sourceFile, String destinationFile)throws Exception
     {
         try
         {
             if(checkFile(sourceFile))
             {
                 if(sourceFile.equalsIgnoreCase(destinationFile))
-                {
-                    System.out.println();
+                    System.out.println(SOURCE_DEST_SAME);
 
-                }
                 else
                 {
                     if(checkFile(destinationFile))
                         System.out.println(DEST_FILE_EXISTS);
+                    else
+                        copyMoveLogic(new File(sourceFile), new File(destinationFile));
+                    System.out.println(move?new File(sourceFile).delete():"");
+                }
+            }
+            else
+                System.out.println(ARGUMENT_PATH_INVALID);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private final void copyMoveLogic(File src, File dest)throws Exception
+    {
+        try
+        {
+            if( src.isDirectory() )
+            {
+                dest.mkdirs();
+                for( File sourceChild : src.listFiles() )
+                {
+                    File destChild = new File( dest, sourceChild.getName() );
+                    copyMoveLogic( sourceChild, destChild );
                 }
             }
             else
             {
+                InputStream in = new FileInputStream(src);
+                OutputStream out = new FileOutputStream(dest);
+                
+                byte[] buf = new byte[1024];
+                int len;
 
+                while ((len = in.read(buf)) > 0)
+                    out.write(buf, 0, len);
+
+                in.close();
+                out.close();
             }
-
         }
         catch(Exception E)
         {
-
+            E.printStackTrace();
         }
     }
 }
