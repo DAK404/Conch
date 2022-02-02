@@ -40,6 +40,18 @@ public record Cryptography()
     }
 
     /**
+    * Hashing API which will convert a string to an SHA3-256 hash
+    *
+    * @param input : The String that is to be encoded
+    * @return String : Returns the SHA3-256 hash
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
+    public final String stringToSHA_256(String input) throws Exception
+    {
+        return hashString(input, "SHA-256");
+    }
+
+    /**
     * Hashing API which will return the MD5 hash value of a given file
     *
     * @param fileName : The name of the file to be hashed
@@ -49,6 +61,18 @@ public record Cryptography()
     public final String fileToMD5(String fileName) throws Exception
     {
         return hashFile(new File(fileName), "MD5");
+    }
+
+    /**
+    * Hashing API which will return the SHA3-256 hash value of a given file
+    *
+    * @param fileName : The name of the file to be hashed
+    * @return String : Returns the SHA3-256 hash
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
+    public final String fileToSHA_256(String fileName) throws Exception
+    {
+        return hashFile(new File(fileName), "SHA-256");
     }
 
     /**

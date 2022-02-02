@@ -2,7 +2,6 @@ package Conch.API.FileFlex;
 
 import java.io.Console;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -224,7 +223,7 @@ public class FlexLogic
                         System.out.println(DEST_FILE_EXISTS);
                     else
                         copyMoveLogic(new File(sourceFile), new File(destinationFile));
-                    System.out.println(move?new File(sourceFile).delete():"");
+                    System.out.print(move?new File(sourceFile).delete():"");
                 }
             }
             else
