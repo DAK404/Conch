@@ -27,7 +27,7 @@ public class FlexLogic
     """;
 
     private final String INVALID_COMMAND = """
-    [E] : COMMMAND NOT FOUND.
+    [E] : COMMAND NOT FOUND.
     """;
 
     // private final String <reserved for future use> = """
@@ -36,6 +36,8 @@ public class FlexLogic
     private String _username = "";
     private String _name = "";
     private String _currentDirectory = "";
+
+    private char _fileSeparator = File.separatorChar;
 
     private Console console = System.console();
 
@@ -76,17 +78,50 @@ public class FlexLogic
 
     private void changeDir(String fileName)throws Exception
     {
+        try
+        {
+            if(fileName.equals(".."))
+            {
+                prevDir();
+                return;
+            }
 
+            fileName = _currentDirectory + fileName + "/";
+            if(checkFile(fileName))
+                _currentDirectory=fileName;
+            else
+                System.out.println(ARGUMENT_PATH_INVALID);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void resetToHomeDir()throws Exception
     {
-
+        String homeDir = "./Users/Conch/"+_username+"/";
+        _currentDirectory = homeDir;
     }
 
     private void prevDir()throws Exception
     {
+        try
+        {
+            _currentDirectory = _currentDirectory.substring(0, _currentDirectory.length() - 1);
+            _currentDirectory = _currentDirectory.replace(_currentDirectory.substring(_currentDirectory.lastIndexOf('/'), _currentDirectory.length()), "/");
 
+            if(_currentDirectory.equals("./Users/Truncheon/"))
+            {
+                System.out.println("[W] : Permission Denied.");
+                resetToHomeDir();
+            }
+            System.gc();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     ///////////////////////////////////////////////////////////////
