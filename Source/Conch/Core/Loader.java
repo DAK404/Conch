@@ -115,10 +115,9 @@ public class Loader
     {
         boolean status = false;
 
-        /*
-         * String [] FileList = {"./.Manifest/Manifest.m1", "./System/Conch", "./Users/Conch"}
-         */
-
+        if(!systemAsserts())
+            new Conch.Core.Setup().setupLogic();
+        
         //list all the files in the Conch directories
         //Load the hash filelist. If the file list is not found, download the latest build by default
 
@@ -128,6 +127,28 @@ public class Loader
 
         return status;
 
+    }
+
+    private final boolean systemAsserts()throws Exception
+    {
+        boolean status = true;
+        try
+        {
+            String [] fileList = {"./.Manifest/Manifest.m1", "./System/Conch", "./Users/Conch"};
+            for(String asserts : fileList)
+            {
+                if(! new File(asserts).exists())
+                {
+                    status = false;
+                    break;
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return status;
     }
 
     //Logic to check the file with the hashes present in the filelist
