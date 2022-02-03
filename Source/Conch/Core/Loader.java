@@ -114,8 +114,12 @@ public class Loader
     private boolean integrityCheck()throws Exception
     {
         boolean status = false;
-        //list all the files in the Conch directories
 
+        /*
+         * String [] FileList = {"./.Manifest/Manifest.m1", "./System/Conch", "./Users/Conch"}
+         */
+
+        //list all the files in the Conch directories
         //Load the hash filelist. If the file list is not found, download the latest build by default
 
         //Begin checking the files
@@ -158,20 +162,27 @@ public class Loader
             // use File.separator to get the correct file separator for the current OS
             for(String fileNames: filePaths)
             {
-                String manifestHash = (System.getProperty("os.name").contains("Linux")?props.get(fileNames.replaceAll(File.separator, "\\\\")):props.get(fileNames)).toString();
                 fileHash = new Conch.API.Scorpion.Cryptography().fileToMD5(fileNames);
-
-                if(manifestHash.equalsIgnoreCase(fileHash))
+                try
                 {
-                    fileCheckStatus = true;
-                    continue;
+                    String manifestHash = (System.getProperty("os.name").contains("Linux")?props.get(fileNames.replaceAll(File.separator, "\\\\")):props.get(fileNames)).toString();
+                    if(manifestHash.equalsIgnoreCase(fileHash))
+                    {
+                        fileCheckStatus = true;
+                        continue;
+                    }
+                    else
+                    {
+                        fileCheckStatus = false;
+                        PrintStreams.printError("Failure at Integrity Check: " + fileNames);
+                        PrintStreams.printError("File Hash Output: " + fileHash);
+                        break;
+                    }
                 }
-                else
+                catch(NullPointerException hashingException)
                 {
-                    fileCheckStatus = false;
-                    PrintStreams.printError("Failure at Integrity Check: " + fileNames);
-                    PrintStreams.printError("File Hash Output: " + fileHash);
-                    break;
+                    PrintStreams.printAttention("Unknown File Found : " + fileNames);
+                    PrintStreams.printAttention("Unknown File Hash  : " + fileHash);
                 }
             }
         }

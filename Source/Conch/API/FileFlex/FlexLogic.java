@@ -11,6 +11,10 @@ import Conch.API.PrintStreams;
 
 public class FlexLogic 
 {
+    ///////////////////////////////////////////////////////////////
+    // STRINGS TO DISPLAY INFORMATION ON TERMINAL
+    ///////////////////////////////////////////////////////////////
+
     private final String ARGUMENT_MISMATCH = """
     [E] : Invalid argument length.
     """;
@@ -27,6 +31,10 @@ public class FlexLogic
 
     private final String INVALID_COMMAND = """
     [E] : COMMAND NOT FOUND.
+    """;
+
+    private final String FILE_EXISTS = """
+    [E] : A file/directory with the same name already exists.
     """;
 
     // private final String <reserved for future use> = """
@@ -55,6 +63,9 @@ public class FlexLogic
         String[] cmd = input.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         switch(cmd[0])
         {
+            case "":
+                break;
+
             case "cp":
             case "copy":
                 System.out.println((cmd.length)<3?ARGUMENT_MISMATCH + "Syntax: copy <source> <destination>":"Copying File...");
@@ -63,6 +74,14 @@ public class FlexLogic
             case "mv":
             case "move":
                 System.out.println((cmd.length)<3?ARGUMENT_MISMATCH + "Syntax: move <source> <destination>":"Moving File...");
+                break;
+
+            case "dir":
+            case "ls":
+                listFiles();
+                break;
+
+            case "exit":
                 break;
 
             default:
@@ -266,6 +285,95 @@ public class FlexLogic
         catch(Exception E)
         {
             E.printStackTrace();
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////
+    // LOGIC TO DELETE A FILE OR DIRECTORY
+    ///////////////////////////////////////////////////////////////
+
+    private final void deleteFilesDirs(String fileName)throws Exception
+    {
+        try
+        {
+            fileName = _currentDirectory + fileName;
+
+            if(checkFile(fileName))
+            {
+                File del = new File(fileName);
+                if(del.isDirectory())
+                    deletionLogic(del);
+                else
+                    del.delete();
+            }
+            else
+                System.out.println(ARGUMENT_PATH_INVALID);
+        }
+        catch(Exception E)
+        {
+
+        }
+    }
+
+    private final void deletionLogic(File delfile)throws Exception
+    {
+        if (delfile.listFiles() != null)
+        {
+            for (File fn : delfile.listFiles())
+            deletionLogic(fn);
+        }
+        delfile.delete();
+    }
+
+    ///////////////////////////////////////////////////////////////
+    // LOGIC TO CREATE A NEW DIRECTORY
+    ///////////////////////////////////////////////////////////////
+
+    private final void createDirectory(String fileName)throws Exception
+    {
+        try
+        {
+            fileName = _currentDirectory + fileName;
+            
+            if(checkFile(fileName))
+                System.out.println(FILE_EXISTS);
+            else
+                new File(fileName).mkdir();
+        }
+        catch(Exception E)
+        {
+
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////
+    // LOGIC TO RENAME A FILE OR DIRECTORY
+    ///////////////////////////////////////////////////////////////
+
+    private final void renameFilesDirs(String oldFileName, String newFileName)throws Exception
+    {
+        try
+        {
+            oldFileName = _currentDirectory + oldFileName;
+            newFileName = _currentDirectory + newFileName;
+
+            if(checkFile(oldFileName))
+            {
+                if(checkFile(newFileName))
+                    System.out.println(DEST_FILE_EXISTS);
+                else
+                {
+                    File oldFile = new File(oldFileName);
+                    File newFile = new File(newFileName);
+                    oldFile.renameTo(newFile);
+                }
+            }
+            else
+                System.out.println(ARGUMENT_PATH_INVALID);
+        }
+        catch(Exception E)
+        {
+
         }
     }
 }
