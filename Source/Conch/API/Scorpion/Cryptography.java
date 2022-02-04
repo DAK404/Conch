@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public record Cryptography() 
+public record Cryptography()
 {
     // ------------------------------------------------------------------------------------ //
     //                                  PUBLIC API METHODS                                  //

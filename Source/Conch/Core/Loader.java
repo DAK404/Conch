@@ -1,10 +1,11 @@
 package Conch.Core;
 
-//Import the Java classes
+//Import the Java IO classes
 import java.io.File;
 import java.io.Console;
 import java.io.FileInputStream;
 
+//Import the Java Util classes
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -13,9 +14,9 @@ import java.util.Properties;
 import Conch.API.BuildInfo;
 import Conch.API.PrintStreams;
 
-public class Loader 
+public class Loader
 {
-    Console console = System.console();
+    private Console console = System.console();
 
     //generic string to print the status of the program on screen
     //private String _status = "Failed";
@@ -45,12 +46,13 @@ public class Loader
     //Main logic of the loader program
     public static void main(String[] args)throws Exception
     {
+        System.gc();
         switch(args[0].toLowerCase())
         {
             case "debug_ps":
                 new Loader().debugPS();
                 break;
-            
+
             case "normal":
                 break;
 
@@ -86,10 +88,10 @@ public class Loader
 
             case "restart":
                 System.exit(0x1A0001);
-                
+
             case "":
                 break;
-            
+
             default:
                 PrintStreams.printAttention("Undefined Command: " + splitCmd[0]);
                 break;
@@ -117,13 +119,13 @@ public class Loader
 
         if(!systemAsserts())
             new Conch.Core.Setup().setupLogic();
-        
+
         //list all the files in the Conch directories
         //Load the hash filelist. If the file list is not found, download the latest build by default
 
         //Begin checking the files
         status = checkFiles();
-        PrintStreams.printAttention("KERNEL INTEGRITY: " + (status?"OK":"FAILED"));        
+        PrintStreams.printAttention("KERNEL INTEGRITY: " + (status?"OK":"FAILED"));
 
         return status;
 
@@ -161,10 +163,10 @@ public class Loader
 
         try
         {
-            System.out.println("Checking Kernel Integrity...");
+            System.out.println("Checking Kernel Integrity...\n");
 
             //check if the manifest file exists
-            if(!new File("./.Manifest").exists() || !new File("./.Manifest/Manifest.m1").exists())
+            if(!new File("./.Manifest/Conch").exists() || !new File("./.Manifest/Conch/Manifest.m1").exists())
             {
                 PrintStreams.printError("MANIFEST FILE PARSING ERROR: 0x00A101");
                 System.out.println("The Manifest file is either corrupt, malformed, missing or cannot be loaded.");
@@ -173,7 +175,7 @@ public class Loader
             }
 
             Properties props = new Properties();
-            FileInputStream configStream = new FileInputStream("./.Manifest/Manifest.m1");
+            FileInputStream configStream = new FileInputStream("./.Manifest/Conch/Manifest.m1");
             props.loadFromXML(configStream);
             configStream.close();
 
@@ -230,24 +232,10 @@ public class Loader
                 if (f.isDirectory())
                     listAllFiles(f);
 
-                if (f.isFile()) 
+                if (f.isFile())
                 {
-                    ///////////////////////////////////////////////////////////////
-                    // DEBUG CODE! REMOVE BEFORE RELEASE!
-                    ///////////////////////////////////////////////////////////////
-                    
-                    if(f.getName().equals("HashingTools.java"))
-                        continue;
-
-                    ///////////////////////////////////////////////////////////////
-                    // DEBUG CODE! REMOVE BEFORE RELEASE!
-                    ///////////////////////////////////////////////////////////////
-
-                    else
-                    {
-                        String a = f.getPath();
-                        filePaths.add(a);
-                    }
+                    String a = f.getPath();
+                    filePaths.add(a);
                 }
             }
         }

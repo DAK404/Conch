@@ -1,6 +1,7 @@
 package Conch.Core;
 
 import java.io.Console;
+import java.io.File;
 
 public class Setup
 {
@@ -40,7 +41,7 @@ public class Setup
 
         The shell needs to be setup before it can be used.
 
-        NOTE: 
+        NOTE:
 
         * If you are an Administrator, press ENTER to continue.
         * If you are a normal user, please contact the Administrator for help.
@@ -64,20 +65,40 @@ public class Setup
             F. CHECK FOR UPDATES
             G. END SETUP
         \n---------------------------------------
-        
+
         To exit the setup, press the CTRL + C keys. Else, press ENTER key.
         """;
-        
+
         console.readLine(output + "DEFAULT@SETUP_MODE> ");
     }
 
     private void legal()
     {
-
+        try
+        {
+            new Conch.API.FileFlex.FileRead().readManualDocument("EULA.txt");
+            if(console.readLine("EULA?> ").equalsIgnoreCase("y"))
+            {
+                new Conch.API.FileFlex.FileRead().readManualDocument("Readme.txt");
+                new Conch.API.FileFlex.FileRead().readManualDocument("Credits.txt");
+            }
+            else
+                System.exit(0x1A0100);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        _legalAndInfo = "ACCEPTED & DONE";
     }
 
     private void createDirectories()
     {
+        String[] fileList = {"./System/Conch/Public", "./System/Conch/Private", "./Users/Conch"};
+        for(String files:fileList)
+            new File(files).mkdirs();
+
+        _createDirectories = "COMPLETE";
 
     }
 

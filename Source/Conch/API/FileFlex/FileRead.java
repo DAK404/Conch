@@ -21,13 +21,13 @@ public final class FileRead
     * @param helpFile
     * @throws Exception : Handle exceptions thrown during program runtime.
     */
-    public final void showHelp(String helpFile)throws Exception
+    public final void readManualDocument(String helpFile)throws Exception
     {
         try
         {
             if(checkFileValidity(helpFile))
             {
-                file = new File("./Information/Truncheon/" + helpFile);
+                file = new File("./Information/Conch/" + helpFile);
                 readFile(true);
             }
         }
@@ -45,12 +45,13 @@ public final class FileRead
     */
     private boolean checkFileValidity(String fn)throws Exception
     {
+        boolean status = true;
         if(fn == null || fn.equals("") || fn.startsWith(" "))
         {
             System.out.println("Please enter a valid file name to open.");
-            return false;
+            status = false;
         }
-        return true;
+        return status;
     }
 
     /**
@@ -98,7 +99,7 @@ public final class FileRead
         //This checks if the filename points to a directory
         else if (file.isDirectory())
         System.out.println("[ ERROR ] : Unable to read file : The specified file name is a directory.");
-        
+
         //If the file exists, the file is displayed on the terminal.
         else
         {

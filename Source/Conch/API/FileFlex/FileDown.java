@@ -10,7 +10,7 @@ import java.nio.channels.ReadableByteChannel;
 //Import the required Java Net classes
 import java.net.URL;
 
-public class FileDown 
+public class FileDown
 {
     /**
     *
