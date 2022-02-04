@@ -51,8 +51,8 @@ public class FileDown
     {
         try
         {
-            System.out.println("Downloading update file from : https://gitreleases.dev/gh/DAK404/Truncheon/latest/Truncheon.zip");
-            return downloadUsingNIO("https://gitreleases.dev/gh/DAK404/Truncheon/latest/Truncheon.zip", "Update.zip");
+            System.out.println("Downloading update file from : https://gitreleases.dev/gh/DAK404/Conch/latest/Conch.zip");
+            return downloadUsingNIO("https://gitreleases.dev/gh/DAK404/Conch/latest/Conch.zip", "Update.zip");
         }
         catch(Exception E)
         {

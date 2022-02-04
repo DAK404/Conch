@@ -22,7 +22,7 @@ public class PolicyEnforce
             {
                 //If the policy value returned is false, print an error statement about the policy value
                 case "off":
-                System.out.println("[ ATTENTION ] : This module access is denied due to the policy configuration.\nPlease contact the system administrator for more information.");
+                Conch.API.PrintStreams.printAttention("This module access is denied due to the policy configuration.\nPlease contact the Administrator for more information.");
                 console.readLine();
                 break;
 
@@ -33,13 +33,13 @@ public class PolicyEnforce
 
                 //When a policy is not found or cannot be loaded, display an error message about the misconfigured policy
                 case "error":
-                System.out.println("[ WARNING ] : Module Policy is not configured. Please contact the system administrator to initialize the policy.");
+                Conch.API.PrintStreams.printWarning("Module Policy is not configured. Please contact the system administrator to initialize the policy.");
                 console.readLine();
                 break;
 
                 //Handle any other inputs returned after checking the policy
                 default:
-                System.out.println("[ ERROR ] : POLICY CONFIGURATION ERROR!.");
+                Conch.API.PrintStreams.printError("POLICY CONFIGURATION ERROR!");
                 console.readLine();
                 break;
             }
@@ -59,7 +59,7 @@ public class PolicyEnforce
         {
             //Open the properties streams
             Properties prop = new Properties();
-            String propsFileName="./System/Private/Truncheon/Policy.burn";
+            String propsFileName="./System/Conch/Private/Policy.burn";
 
             //Load the file stream containing the program properties
             FileInputStream configStream = new FileInputStream(propsFileName);
@@ -76,7 +76,7 @@ public class PolicyEnforce
         catch(Exception E)
         {
             //Set the string value to "error" if the given property is not found, unreadable or is misconfigured
-            policyValue = "Error";
+            policyValue = "ERROR";
         }
 
         //return the policy value in the string format

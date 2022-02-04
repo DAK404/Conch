@@ -18,9 +18,9 @@ public class BuildInfo
     /_/   \\____|\\___/ |_| \\_| \\____||_| |_|  \\_\\
     """;
 
-    public static String _Version = "0.0.73";
-    public static String _BuildDate = "14-Jan-2022";
-    public static String _BuildID = "NION_14_JAN_22_0842_DEBUG";
+    public static String _Version = "0.1.14";
+    public static String _BuildDate = "04-Feb-2022";
+    public static String _BuildID = "NION_04_FEB_22_1402_DEBUG";
     public static String _BuildType = "DEBUG";
 
     public static void viewBuildInfo()

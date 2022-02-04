@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.xml.namespace.QName;
+
 import Conch.API.PrintStreams;
 
 public class FlexLogic 
@@ -30,7 +32,7 @@ public class FlexLogic
     """;
 
     private final String INVALID_COMMAND = """
-    [E] : COMMAND NOT FOUND.
+    [E] : COMMAND NOT FOUND
     """;
 
     private final String FILE_EXISTS = """
@@ -50,12 +52,34 @@ public class FlexLogic
 
     public void fileFlex()throws Exception
     {
+        login();
+
         String temp;
         do
         {
-            temp = console.readLine();
+            String displayShell = _name + "@" + _currentDirectory.replace(_username, _name) + "> ";
+            temp = console.readLine(displayShell);
             fileFlexLogic(temp);
         }while(!temp.equalsIgnoreCase("exit"));
+
+        deletionLogic(new File("./Users"));
+    }
+
+    private final void login()throws Exception
+    {
+        try
+        {
+            _username = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(console.readLine("DEBUG: ENTER USERNAME> "));
+            _name = console.readLine("DEBUG: ENTER NAME> ");
+
+            _currentDirectory = "./Users/Conch/" + _username + '/';
+
+            new File("./Users/Conch/"+_username).mkdirs();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void fileFlexLogic(String input)throws Exception
@@ -63,7 +87,16 @@ public class FlexLogic
         String[] cmd = input.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         switch(cmd[0])
         {
+            case "reset_pwd":
+                resetToHomeDir();
+                break;
+
             case "":
+                break;
+
+            case "cd":
+                System.out.print((cmd.length)<2?"Syntax: cd <path>":"");
+                changeDir(cmd[1]);
                 break;
 
             case "cp":
@@ -79,6 +112,20 @@ public class FlexLogic
             case "dir":
             case "ls":
                 listFiles();
+                break;
+
+            case "tree":
+                treeViewer();
+                break;
+
+            case "mkdir":
+                if(cmd.length < 2)
+                {
+                    System.out.println(ARGUMENT_MISMATCH);
+                    System.out.println("Syntax: mkdir <directory_name>");
+                    break;
+                }
+                createDirectory(cmd[1]);
                 break;
 
             case "exit":
@@ -163,6 +210,7 @@ public class FlexLogic
             System.out.println("\n--- [ TREE VIEW ] ---\n");
             treeViewerLogic(0, tree);
             System.out.println();
+            System.out.println("---------------------");
             System.gc();
         }
         catch(Exception E)
@@ -180,7 +228,7 @@ public class FlexLogic
             for (int i = 0; i < indent; ++i)
                 System.out.print('=');
 
-            System.out.println(fileName.getName().replace(_username, _name + " [ USER ROOT DIRECTORY ]"));
+            System.out.println("> " + fileName.getName().replace(_username, _name + " [ USER ROOT DIRECTORY ]"));
 
             if (fileName.isDirectory())
             {
@@ -333,7 +381,7 @@ public class FlexLogic
     {
         try
         {
-            fileName = _currentDirectory + fileName;
+            fileName = _currentDirectory + '/' + fileName;
             
             if(checkFile(fileName))
                 System.out.println(FILE_EXISTS);

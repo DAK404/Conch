@@ -62,14 +62,14 @@ public class Loader
         new Loader().debugShell();
     }
 
-    private void debugShell()
+    private void debugShell()throws Exception
     {
         PrintStreams.printInfo("Shell loaded successfully!");
         while(true)
             debugShellCmdProcessor(console.readLine("??? ~DBG_CONCH > "));
     }
 
-    private void debugShellCmdProcessor(String cmd)
+    private void debugShellCmdProcessor(String cmd)throws Exception
     {
         String[] splitCmd = cmd.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
 
@@ -81,6 +81,10 @@ public class Loader
 
             case "clear":
                 BuildInfo.viewBuildInfo();
+                break;
+
+            case "fileflex":
+                new Conch.API.FileFlex.FlexLogic().fileFlex();
                 break;
 
             case "exit":
