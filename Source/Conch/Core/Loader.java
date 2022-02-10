@@ -231,8 +231,9 @@ public class Loader
             for (File f: filesList)
             {
                 //Dont bother checking the manifest folder content hashes
-                if(f.getName().equals(".Manifest"))
+                if(ignoreFiles(f.getName()))
                     continue;
+                
                 if (f.isDirectory())
                     listAllFiles(f);
 
@@ -247,5 +248,20 @@ public class Loader
         {
             System.out.println("Error: " + e);
         }
+    }
+
+    private boolean ignoreFiles(String fileName)
+    {
+        boolean status = false;
+        String[] ignoreList = {"./.Manifest", "./System", "./Users", "./JRE"};
+        for(String files : ignoreList)
+        {
+            if(fileName.equalsIgnoreCase(files))
+            {
+                status = true;
+                break;
+            }
+        }
+        return status;
     }
 }

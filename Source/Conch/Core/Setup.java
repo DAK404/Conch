@@ -23,15 +23,19 @@ public class Setup
         //Clear the screen and display the Truncheon Build Information
         Conch.API.BuildInfo.viewBuildInfo();
 
-        //Display the setup status and information.
-        System.out.println("SETUP CHECKLIST");
-        System.out.println("===============\n");
-        System.out.println("1. Legal and Important Information    : " + _legalAndInfo);
-        System.out.println("2. Initialize Truncheon Dependencies  : " + _createDirectories);
-        System.out.println("3. Initialize Database Files          : " + _initializeDatabase);
-        System.out.println("4. Administrator account creation     : " + _initializeAdminAccount);
-        System.out.println("5. Initialize Policies and BURN Files : " + _initializePolicies);
-        System.out.println("\n===============");
+        String message = """
+        CONCH SETUP CHECKLIST
+        =====================
+
+        1. Legal and Important Information    : """ + _legalAndInfo + """
+        2. Initialize Conch Dependencies      : """ + _createDirectories + """
+        3. Initialize Database Files          : """ + _initializeDatabase + """
+        4. Administrator Account Creation     : """ + _initializeAdminAccount + """
+        5. Initialize Policies and BURN Files : """ + _initializePolicies + """
+
+        =====================""";
+        
+        System.out.println(message);
     }
 
     private void prerequisites()

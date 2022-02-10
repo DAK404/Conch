@@ -15,6 +15,11 @@ public record Cryptography()
     //                                  PUBLIC API METHODS                                  //
     // ------------------------------------------------------------------------------------ //
 
+    ///////////////////////////////////////////////////////////////
+    // 
+    ///////////////////////////////////////////////////////////////
+
+
     /**
     * Hashing API which will convert a string to an MD5 hash
     *
@@ -34,9 +39,9 @@ public record Cryptography()
     * @return String : Returns the SHA3-256 hash
     * @throws Exception : Handle exceptions thrown during program runtime.
     */
-    public final String stringToSHA3_256(String input) throws Exception
+    public final String stringToSHA_256(String input) throws Exception
     {
-        return hashString(input, "SHA3-256");
+        return hashString(input, "SHA-256");
     }
 
     /**
@@ -46,9 +51,9 @@ public record Cryptography()
     * @return String : Returns the SHA3-256 hash
     * @throws Exception : Handle exceptions thrown during program runtime.
     */
-    public final String stringToSHA_256(String input) throws Exception
+    public final String stringToSHA3_256(String input) throws Exception
     {
-        return hashString(input, "SHA-256");
+        return hashString(input, "SHA3-256");
     }
 
     /**

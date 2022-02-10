@@ -7,11 +7,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.xml.namespace.QName;
-
 import Conch.API.PrintStreams;
 
-public class FlexLogic 
+public class FlexLogic
 {
     ///////////////////////////////////////////////////////////////
     // STRINGS TO DISPLAY INFORMATION ON TERMINAL
@@ -46,7 +44,7 @@ public class FlexLogic
     private String _name = "";
     private String _currentDirectory = "";
 
-    private char _fileSeparator = File.separatorChar;
+    // private char _fileSeparator = File.separatorChar;
 
     private Console console = System.console();
 
@@ -87,53 +85,123 @@ public class FlexLogic
         String[] cmd = input.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         switch(cmd[0])
         {
-            case "reset_pwd":
-                resetToHomeDir();
-                break;
+            ///////////////////////////////////////////////////////////////
+            // Logic for navigation commands
+            ///////////////////////////////////////////////////////////////
 
-            case "":
-                break;
+            case "reset_pwd":
+            resetToHomeDir();
+            break;
 
             case "cd":
-                System.out.print((cmd.length)<2?"Syntax: cd <path>":"");
-                changeDir(cmd[1]);
-                break;
+            if(cmd.length < 2)
+            {
+                System.out.println(ARGUMENT_MISMATCH);
+                System.out.println("Syntax:\ncd <path>");
+            }
+            else
+            changeDir(cmd[1]);
+            break;
 
-            case "cp":
-            case "copy":
-                System.out.println((cmd.length)<3?ARGUMENT_MISMATCH + "Syntax: copy <source> <destination>":"Copying File...");
-                break;
-            
-            case "mv":
-            case "move":
-                System.out.println((cmd.length)<3?ARGUMENT_MISMATCH + "Syntax: move <source> <destination>":"Moving File...");
-                break;
+            ///////////////////////////////////////////////////////////////
+            // Logic to view contents of directory
+            ///////////////////////////////////////////////////////////////
 
             case "dir":
             case "ls":
-                listFiles();
-                break;
+            listFiles();
+            break;
 
             case "tree":
-                treeViewer();
-                break;
+            treeViewer();
+            break;
+
+            ///////////////////////////////////////////////////////////////
+            // Logic to create new directories
+            ///////////////////////////////////////////////////////////////
 
             case "mkdir":
-                if(cmd.length < 2)
-                {
-                    System.out.println(ARGUMENT_MISMATCH);
-                    System.out.println("Syntax: mkdir <directory_name>");
-                    break;
-                }
-                createDirectory(cmd[1]);
-                break;
+            if(cmd.length < 2)
+            {
+                System.out.println(ARGUMENT_MISMATCH);
+                System.out.println("Syntax:\nmkdir <directory_name>");
+            }
+            else
+            createDirectory(cmd[1]);
+            break;
+
+            ///////////////////////////////////////////////////////////////
+            // Logics for file and directory management
+            ///////////////////////////////////////////////////////////////
+
+            // --------------------------------------------------------- //
+            // Logic to remove a file or directory
+            // --------------------------------------------------------- //
+            case "rm":
+            case "del":
+            if(cmd.length < 2)
+            {
+                System.out.println(ARGUMENT_MISMATCH);
+                System.out.println("Syntax:\nrm <file/directory>\ndel <file/directory>");
+            }
+            else
+            deleteFilesDirs(cmd[1]);
+            break;
+
+            // --------------------------------------------------------- //
+            // Logic to copy a file or directory
+            // --------------------------------------------------------- //
+            case "cp":
+            case "copy":
+            if(cmd.length < 3)
+            {
+                System.out.println(ARGUMENT_MISMATCH);
+                System.out.println("Syntax:\ncp <source> <destination>\ncopy <source> <destination>");
+            }
+            else
+            copyMove(false, cmd[1], cmd[2]);
+            break;
+
+            // --------------------------------------------------------- //
+            // Logic to move a file or directory
+            // --------------------------------------------------------- //
+            case "mv":
+            case "move":
+            if(cmd.length < 3)
+            {
+                System.out.println(ARGUMENT_MISMATCH);
+                System.out.println("Syntax:\nmv <source> <destination>\nmove <source> <destination>");
+            }
+            else
+            copyMove(true, cmd[1], cmd[2]);
+            break;
+
+            // --------------------------------------------------------- //
+            // Logic to rename a file or directory
+            // --------------------------------------------------------- //
+            case "rename":
+            if(cmd.length < 3)
+            {
+                System.out.println(ARGUMENT_MISMATCH);
+                System.out.println("Syntax:\nrename <old_name> <new_name>");
+            }
+            else
+            renameFilesDirs(cmd[1], cmd[2]);
+            break;
+
+            ///////////////////////////////////////////////////////////////
+            // Miscellaneous logic to handle inputs
+            ///////////////////////////////////////////////////////////////
+
+            case "":
+            break;
 
             case "exit":
-                break;
+            break;
 
             default:
-                System.out.println(INVALID_COMMAND);
-                break;
+            System.out.println(INVALID_COMMAND);
+            break;
         }
     }
 
@@ -153,9 +221,9 @@ public class FlexLogic
 
             fileName = _currentDirectory + fileName + "/";
             if(checkFile(fileName))
-                _currentDirectory=fileName;
+            _currentDirectory=fileName;
             else
-                System.out.println(ARGUMENT_PATH_INVALID);
+            System.out.println(ARGUMENT_PATH_INVALID);
         }
         catch(Exception e)
         {
@@ -176,7 +244,7 @@ public class FlexLogic
             _currentDirectory = _currentDirectory.substring(0, _currentDirectory.length() - 1);
             _currentDirectory = _currentDirectory.replace(_currentDirectory.substring(_currentDirectory.lastIndexOf('/'), _currentDirectory.length()), "/");
 
-            if(_currentDirectory.equals("./Users/Truncheon/"))
+            if(_currentDirectory.equals("./Users/Conch/"))
             {
                 System.out.println("[W] : Permission Denied.");
                 resetToHomeDir();
@@ -223,12 +291,10 @@ public class FlexLogic
     {
         try
         {
-            System.out.print('|');
-
             for (int i = 0; i < indent; ++i)
-                System.out.print('=');
+            System.out.print(' ');
 
-            System.out.println("> " + fileName.getName().replace(_username, _name + " [ USER ROOT DIRECTORY ]"));
+            System.out.println("- " + fileName.getName().replace(_username, _name + " [ USER ROOT DIRECTORY ]"));
 
             if (fileName.isDirectory())
             {
@@ -267,7 +333,7 @@ public class FlexLogic
             System.out.println();
         }
         else
-        System.out.println("[ ERROR ] : The specified file/directory does not exist.");
+        System.out.println(ARGUMENT_PATH_INVALID);
         System.gc();
     }
 
@@ -279,22 +345,23 @@ public class FlexLogic
     {
         try
         {
-            if(checkFile(sourceFile))
+            if(checkFile(_currentDirectory + "/" + sourceFile))
             {
                 if(sourceFile.equalsIgnoreCase(destinationFile))
-                    System.out.println(SOURCE_DEST_SAME);
+                System.out.println(SOURCE_DEST_SAME);
 
                 else
                 {
                     if(checkFile(destinationFile))
-                        System.out.println(DEST_FILE_EXISTS);
+                    System.out.println(DEST_FILE_EXISTS);
                     else
-                        copyMoveLogic(new File(sourceFile), new File(destinationFile));
-                    System.out.print(move?new File(sourceFile).delete():"");
+                    copyMoveLogic(new File(_currentDirectory + sourceFile), new File(_currentDirectory + destinationFile + "/" + sourceFile));
+
+                    if(move)new File(_currentDirectory + sourceFile).delete();
                 }
             }
             else
-                System.out.println(ARGUMENT_PATH_INVALID);
+            System.out.println(ARGUMENT_PATH_INVALID);
         }
         catch(Exception e)
         {
@@ -319,12 +386,12 @@ public class FlexLogic
             {
                 InputStream in = new FileInputStream(src);
                 OutputStream out = new FileOutputStream(dest);
-                
+
                 byte[] buf = new byte[1024];
                 int len;
 
                 while ((len = in.read(buf)) > 0)
-                    out.write(buf, 0, len);
+                out.write(buf, 0, len);
 
                 in.close();
                 out.close();
@@ -350,27 +417,34 @@ public class FlexLogic
             {
                 File del = new File(fileName);
                 if(del.isDirectory())
-                    deletionLogic(del);
+                deletionLogic(del);
                 else
-                    del.delete();
+                del.delete();
             }
             else
-                System.out.println(ARGUMENT_PATH_INVALID);
+            System.out.println(ARGUMENT_PATH_INVALID);
         }
-        catch(Exception E)
+        catch(Exception e)
         {
-
+            e.printStackTrace();
         }
     }
 
-    private final void deletionLogic(File delfile)throws Exception
+    private final void deletionLogic(File delFile)throws Exception
     {
-        if (delfile.listFiles() != null)
+        try
         {
-            for (File fn : delfile.listFiles())
-            deletionLogic(fn);
+            if (delFile.listFiles() != null)
+            {
+                for (File fn : delFile.listFiles())
+                deletionLogic(fn);
+            }
+            delFile.delete();
         }
-        delfile.delete();
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     ///////////////////////////////////////////////////////////////
@@ -382,15 +456,15 @@ public class FlexLogic
         try
         {
             fileName = _currentDirectory + '/' + fileName;
-            
-            if(checkFile(fileName))
-                System.out.println(FILE_EXISTS);
-            else
-                new File(fileName).mkdir();
-        }
-        catch(Exception E)
-        {
 
+            if(checkFile(fileName))
+            System.out.println(FILE_EXISTS);
+            else
+            new File(fileName).mkdir();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -408,7 +482,7 @@ public class FlexLogic
             if(checkFile(oldFileName))
             {
                 if(checkFile(newFileName))
-                    System.out.println(DEST_FILE_EXISTS);
+                System.out.println(DEST_FILE_EXISTS);
                 else
                 {
                     File oldFile = new File(oldFileName);
@@ -417,11 +491,11 @@ public class FlexLogic
                 }
             }
             else
-                System.out.println(ARGUMENT_PATH_INVALID);
+            System.out.println(ARGUMENT_PATH_INVALID);
         }
-        catch(Exception E)
+        catch(Exception e)
         {
-
+            e.printStackTrace();
         }
     }
 }
