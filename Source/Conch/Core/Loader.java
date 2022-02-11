@@ -96,6 +96,10 @@ public class Loader
                 PrintStreams.printInfo("Help Document Viewer 1.0: WORK IN PROGRESS...");
                 break;
 
+            case "update":
+                new Conch.API.FileFlex.Parcel.UpdateLogic().updateProgram();
+                break;
+
             case "clear":
                 BuildInfo.viewBuildInfo();
                 break;

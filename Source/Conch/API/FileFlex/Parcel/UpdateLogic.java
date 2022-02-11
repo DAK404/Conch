@@ -82,7 +82,7 @@ public class UpdateLogic
             PrintStreams.printAttention("The updater shall download and install the latest version from the official repository.");
             PrintStreams.printInfo("Downloading Update File...");
             PrintStreams.printInfo("Source: https://gitreleases.dev/gh/DAK404/Conch/latest/Conch.zip");
-            status = (downloadUpdate()?true:false);
+            status = downloadUpdate();
             PrintStreams.printInfo("Download " + (status?"Successful":"Failed"));
             if(!status)
             {
