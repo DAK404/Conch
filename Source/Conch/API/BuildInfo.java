@@ -1,10 +1,3 @@
-/*
-* ███    ██ ██  ██████  ███    ██             ██████  ██████  ███    ██  ██████ ██   ██ 
-* ████   ██ ██ ██    ██ ████   ██     ██     ██      ██    ██ ████   ██ ██      ██   ██ 
-* ██ ██  ██ ██ ██    ██ ██ ██  ██            ██      ██    ██ ██ ██  ██ ██      ███████ 
-* ██  ██ ██ ██ ██    ██ ██  ██ ██     ██     ██      ██    ██ ██  ██ ██ ██      ██   ██ 
-* ██   ████ ██  ██████  ██   ████             ██████  ██████  ██   ████  ██████ ██   ██ 
-*/
 
 // ========================================================================================= //
 // | ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION! | //
@@ -42,10 +35,10 @@ public class BuildInfo
     /_/   \\____|\\___/ |_| \\_| \\____||_| |_|  \\_\\
     """;
 
-    public static String _Version = "0.1.14";
-    public static String _BuildDate = "04-Feb-2022";
-    public static String _BuildID = "NION_04_FEB_22_1402_DEBUG";
-    public static String _BuildType = "DEBUG";
+    public static String _Version = "1.0.0";
+    public static String _BuildDate = "11-Feb-2022";
+    public static String _BuildID = "NION_11_FEB_22_2305_ALPHA";
+    public static String _BuildType = "ALPHA";
 
     public static void viewBuildInfo()
     {

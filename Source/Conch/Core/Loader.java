@@ -1,10 +1,3 @@
-/*
-* ███    ██ ██  ██████  ███    ██             ██████  ██████  ███    ██  ██████ ██   ██ 
-* ████   ██ ██ ██    ██ ████   ██     ██     ██      ██    ██ ████   ██ ██      ██   ██ 
-* ██ ██  ██ ██ ██    ██ ██ ██  ██            ██      ██    ██ ██ ██  ██ ██      ███████ 
-* ██  ██ ██ ██ ██    ██ ██  ██ ██     ██     ██      ██    ██ ██  ██ ██ ██      ██   ██ 
-* ██   ████ ██  ██████  ██   ████             ██████  ██████  ██   ████  ██████ ██   ██ 
-*/
 
 // ========================================================================================= //
 // | ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION! | //
@@ -277,7 +270,7 @@ public class Loader
     private boolean ignoreFiles(String fileName)
     {
         boolean status = false;
-        String[] ignoreList = {"./.Manifest", "./System", "./Users", "./JRE"};
+        String[] ignoreList = {".Manifest", "System", "Users", "JRE", "BootShell.cmd"};
         for(String files : ignoreList)
         {
             if(fileName.equalsIgnoreCase(files))
