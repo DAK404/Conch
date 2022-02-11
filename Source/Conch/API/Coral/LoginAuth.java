@@ -1,3 +1,27 @@
+/*
+* ███    ██ ██  ██████  ███    ██             ██████  ██████  ███    ██  ██████ ██   ██ 
+* ████   ██ ██ ██    ██ ████   ██     ██     ██      ██    ██ ████   ██ ██      ██   ██ 
+* ██ ██  ██ ██ ██    ██ ██ ██  ██            ██      ██    ██ ██ ██  ██ ██      ███████ 
+* ██  ██ ██ ██ ██    ██ ██  ██ ██     ██     ██      ██    ██ ██  ██ ██ ██      ██   ██ 
+* ██   ████ ██  ██████  ██   ████             ██████  ██████  ██   ████  ██████ ██   ██ 
+*/
+
+// ========================================================================================= //
+// | ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION! | //
+// ========================================================================================= //
+//                                                                                           //
+//      THE SOURCE CODE FOR THE PROGRAM USES THE GNU GPL 3.0 LICENSE. IF YOU DECIDE TO       //
+//     MODIFY, COMPILE AND DISTRIBUTE THE SOURCE CODE, YOU MUST INCLUDE THIS DISCLAIMER,     //
+//     ANY MODIFICATIONS, AND ANY CHANGES MADE TO THE PROGRAM. THE GNU GPL 3.0 LICENSE       //
+//     CAN BE FOUND HERE: https://www.gnu.org/licenses/gpl-3.0.en.html                       //
+//                                                                                           //
+//     NOTE: THE SOFTWARE MUST HAVE A LINK TO THE PROGRAM SOURCE CODE OR MUST BE BUNDLED     //
+//     ALONG WITH THE PROGRAM BINARIES. IF YOU DO NOT AGREE TO THE TERMS, DO NOT USE THE     //
+//      SOURCE CODE OR THE BINARIES. THE SOURCE CODE MODIFICATIONS WILL INHERIT THE GNU      //
+//     GPL 3.0 LICENSE AND THE CODE MUST BE MADE OPEN SOURCE.                                //
+//                                                                                           //
+// ========================================================================================= //
+
 package Conch.API.Coral;
 
 import java.sql.Connection;
@@ -7,59 +31,62 @@ import java.sql.ResultSet;
 
 public class LoginAuth
 {
-    public boolean challengeLogin(String username, String password, String secKey)
+    private String _username;
+
+    public LoginAuth(String usn)
     {
-        boolean status = false;
-        try
-        {
-
-        }
-        catch(Exception E)
-        {
-
-        }
-        return status;
+        _username = usn;
     }
 
-    public boolean checkAdmin()
+    public boolean authenticationLogic(String psw, String key)
     {
-        boolean status = false;
-        try
-        {
-
-        }
-        catch(Exception E)
-        {
-
-        }
-        return status;
+        return retrieveDatabaseEntry("SELECT UserID FROM MUD WHERE Username = ?", "UserID").equals(_username) & retrieveDatabaseEntry("SELECT Password FROM MUD WHERE Username = ?", "Password").equals(psw) & retrieveDatabaseEntry("SELECT SecurityKey FROM MUD WHERE Username = ?", "SecurityKey").equals(key);
     }
 
-    private boolean authenticateCredentials()
+    public boolean checkPrivilegeLogic()
     {
-        boolean status = false;
-        try
-        {
-
-        }
-        catch(Exception E)
-        {
-
-        }
-        return status;
+        return retrieveDatabaseEntry("SELECT Administrator FROM MUD WHERE Username = ?", "Administrator").equals("Yes");
     }
 
-    private boolean adminPrivileges()
+    public String getNameLogic()
     {
-        boolean status = false;
+        return retrieveDatabaseEntry("SELECT Name FROM MUD WHERE Username = ?", "Name");
+    }
+
+    public String getPINLogic()
+    {
+        return retrieveDatabaseEntry("SELECT PIN FROM MUD WHERE Username = ?", "PIN");
+    }
+
+    private String retrieveDatabaseEntry(String sqlCommand, String parameter)
+    {
+        String result = "DEFAULT_STRING";
         try
         {
+            Class.forName("org.sqlite.JDBC");
 
+            String databasePath = "jdbc:sqlite:./System/Private/Conch/mud.dbx";
+
+            Connection dbConnection = DriverManager.getConnection(databasePath);
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(sqlCommand);
+            
+            preparedStatement.setString(1, _username);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            result = resultSet.getString(parameter);
+
+            resultSet.close();
+            preparedStatement.close();
+            dbConnection.close();
+
+            System.gc();
         }
-        catch(Exception E)
+        catch(Exception e)
         {
-
+            result = "ERROR";
+            e.printStackTrace();
         }
-        return status;
-    }
+        return result;
+    }    
 }
