@@ -33,7 +33,7 @@ public class LoginAuth
 
     public boolean authenticationLogic(String psw, String key)
     {
-        return retrieveDatabaseEntry("SELECT UserID FROM MUD WHERE Username = ?", "UserID").equals(_username) & retrieveDatabaseEntry("SELECT Password FROM MUD WHERE Username = ?", "Password").equals(psw) & retrieveDatabaseEntry("SELECT SecurityKey FROM MUD WHERE Username = ?", "SecurityKey").equals(key);
+        return retrieveDatabaseEntry("SELECT Password FROM MUD WHERE Username = ?", "Password").equals(psw) & retrieveDatabaseEntry("SELECT SecurityKey FROM MUD WHERE Username = ?", "SecurityKey").equals(key);
     }
 
     public boolean checkPrivilegeLogic()
@@ -58,7 +58,7 @@ public class LoginAuth
         {
             Class.forName("org.sqlite.JDBC");
 
-            String databasePath = "jdbc:sqlite:./System/Private/Conch/mud.dbx";
+            String databasePath = "jdbc:sqlite:./System/Conch/Private/mud.dbx";
 
             Connection dbConnection = DriverManager.getConnection(databasePath);
             PreparedStatement preparedStatement = dbConnection.prepareStatement(sqlCommand);

@@ -28,13 +28,6 @@ import java.net.URL;
 
 public class FileDown
 {
-    /**
-    *
-    * @param URL
-    * @param fileName
-    * @return
-    * @throws Exception : Handle exceptions thrown during program runtime.
-    */
     public final boolean downloadFile(String URL, String fileName)throws Exception
     {
         try
@@ -58,34 +51,26 @@ public class FileDown
         return false;
     }
 
-    /**
-    *
-    * @return
-    * @throws Exception : Handle exceptions thrown during program runtime.
-    */
     public final boolean downloadUpdate()throws Exception
     {
+        boolean status = false;
         try
         {
             System.out.println("Downloading update file from : https://gitreleases.dev/gh/DAK404/Conch/latest/Conch.zip");
-            return downloadUsingNIO("https://gitreleases.dev/gh/DAK404/Conch/latest/Conch.zip", "Update.zip");
+            status =  downloadUsingNIO("https://gitreleases.dev/gh/DAK404/Conch/latest/Conch.zip", "Update.zip");
         }
         catch(Exception E)
         {
             //Handle any exceptions thrown during runtime
+            status = false;
             E.printStackTrace();
         }
-        return false;
+        return status;
     }
 
-    /**
-    *
-    * @param urlStr
-    * @param file
-    * @return
-    * @throws Exception : Handle exceptions thrown during program runtime.
-    */
-    private final boolean downloadUsingNIO(String urlStr, String file) throws Exception {
+    private final boolean downloadUsingNIO(String urlStr, String file) throws Exception
+    {
+        boolean status = false;
         try
         {
             URL website = new URL(urlStr);
@@ -95,11 +80,12 @@ public class FileDown
             fos.close();
             rbc.close();
             System.gc();
-            return true;
+            status = true;
         }
         catch (Exception E)
         {
-            return false;
+            status = false;
         }
+        return status;
     }
 }

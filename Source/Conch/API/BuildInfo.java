@@ -35,8 +35,8 @@ public class BuildInfo
     """;
 
     public static String _Version = "1.0.0";
-    public static String _BuildDate = "11-Feb-2022";
-    public static String _BuildID = "NION_11_FEB_22_2305_ALPHA";
+    public static String _BuildDate = "12-Feb-2022";
+    public static String _BuildID = "NION_12_FEB_22_2120_ALPHA";
     public static String _BuildType = "ALPHA";
 
     public static void viewBuildInfo()

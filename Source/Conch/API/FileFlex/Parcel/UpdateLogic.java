@@ -32,6 +32,39 @@ import Conch.API.PrintStreams;
 
 public class UpdateLogic
 {
+    String header = """
+    ---------- CONCH PROGRAM UPDATER 1.0.0 ----------
+    """;
+
+    String DOWNLOAD_ERROR = """
+    Failed to download the update.
+
+    Possible Causes:
+    * Limited/restricted network access, or firewall rules which prevented downloading the file.
+    * The download session was interrupted by a network change.
+    * The update resource has been moved to a new URL.
+
+    Possible Solutions:
+    * Try running the updater again.
+    * Restart network devices and check the network configuration for Internet Access.
+    * Contact the Administrator for more assistance.
+    """;
+
+    String INSTALL_ERROR = """
+    Failed to install the update.
+
+    Possible Causes:
+    * The downloaded update file was unreadable, malformed, corrupt or was not able to loaded or read.
+    * The update file was deleted by a 3rd party program.
+    * Installation was aborted due to a system error.
+
+    Possible Solutions:
+    * Try running the updater again.
+    * Disable any instrusive applications which may have interfered with the update process.
+    * Manually install the update if the updater fails repeatedly.
+    * Contact the Administrator for more assistance.
+    """;
+
     List <String> fileList;
 
     public final void updateProgram()
@@ -42,39 +75,6 @@ public class UpdateLogic
             Console console = System.console();
             // if(! new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("update"))
             // return;
-
-            String header = """
-            ---------- CONCH PROGRAM UPDATER 1.0.0 ----------
-            """;
-
-            String DOWNLOAD_ERROR = """
-            Failed to download the update.
-
-            Possible Causes:
-            * Limited/restricted network access, or firewall rules which prevented downloading the file.
-            * The download session was interrupted by a network change.
-            * The update resource has been moved to a new URL.
-
-            Possible Solutions:
-            * Try running the updater again.
-            * Restart network devices and check the network configuration for Internet Access.
-            * Contact the Administrator for more assistance.
-            """;
-
-            String INSTALL_ERROR = """
-            Failed to install the update.
-
-            Possible Causes:
-            * The downloaded update file was unreadable, malformed, corrupt or was not able to loaded or read.
-            * The update file was deleted by a 3rd party program.
-            * Installation was aborted due to a system error.
-
-            Possible Solutions:
-            * Try running the updater again.
-            * Disable any instrusive applications which may have interfered with the update process.
-            * Manually install the update if the updater fails repeatedly.
-            * Contact the Administrator for more assistance.
-            """;
 
             BuildInfo.viewBuildInfo();
             PrintStreams.println(header);
@@ -99,6 +99,9 @@ public class UpdateLogic
                 console.readLine();
                 return;
             }
+
+            if(console.readLine("Update Successful. Do you want to restart now?").equalsIgnoreCase("y"))
+                System.exit(0x1A0002);
         }
         catch(Exception e)
         {
@@ -130,7 +133,7 @@ public class UpdateLogic
         }
         catch(Exception e)
         {
-
+            status = false;
         }
         return status;
     }

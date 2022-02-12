@@ -61,7 +61,8 @@ public class Main
     [ ATTENTION ] : THE PROGRAM IS UPDATING. PLEASE WAIT...""";
     
     private static final String AUTOMATIC_REPAIR_MODE = """
-    [ WARNING ] : KERNEL FILES ARE CORRUPT! RESTARTING IN REPAIR MODE TO FIX ISSUES.""";
+    [ WARNING ] : KERNEL FILES ARE CORRUPT!
+    RESTARTING IN REPAIR MODE TO FIX ISSUES.""";
     
     public static void main(String[] args)throws Exception
     {
@@ -152,7 +153,7 @@ public class Main
                 
                 case 0x1A0104:
                 System.err.println(errorHeader + AUTOMATIC_REPAIR_MODE + errorFooter);
-                args[1] = "maintenance";
+                args[1] = "repair";
                 break;
                 
                 default:

@@ -333,7 +333,7 @@ public class FlexLogic
     // LOGIC TO LIST ALL THE FILES IN A DIRECTORY
     ///////////////////////////////////////////////////////////////
 
-    public void listFiles()throws Exception
+    private void listFiles()throws Exception
     {
         String format = "%1$-32s| %2$-24s| %3$-10s\n";
         String c = "-";
@@ -448,7 +448,7 @@ public class FlexLogic
         }
     }
 
-    private final void deletionLogic(File delFile)throws Exception
+    private final void deletionLogic(File delFile)
     {
         try
         {

@@ -44,7 +44,10 @@ public class AccAdd
     {
         //main logic to add an account
         if(!login())
+        {
+            Conch.API.PrintStreams.printError("Invalid Credentials. Aborting...");
             return;
+        }
 
         _currentAccountAdmin = getAdminStatus();
         if(_currentAccountAdmin)
@@ -158,7 +161,10 @@ public class AccAdd
             console.readLine("Invalid Account Username. Press ENTER to try again.");
         }
         else
+        {
+            _status = true;
             _newAccountUsername = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(_newAccountUsername);
+        }
         
         return _status;
     }
@@ -187,7 +193,10 @@ public class AccAdd
             console.readLine("Invalid Account Password. Press ENTER to try again.");
         }
         else
+        {
+            _status = true;
             _newAccountPassword = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(_newAccountPassword);
+        }
 
         return _status;
     }
@@ -216,7 +225,10 @@ public class AccAdd
             console.readLine("Invalid Account Security Key. Press ENTER to try again.");
         }
         else
+        {
+            _status = true;
             _newAccountSecurityKey = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(_newAccountSecurityKey);
+        }
 
         return _status;
     }
@@ -245,7 +257,10 @@ public class AccAdd
             console.readLine("Invalid Account PIN. Press ENTER to try again.");
         }
         else
+        {
+            _status = true;
             _newAccountPIN = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(_newAccountPIN);
+        }
 
         return _status;
     }
@@ -254,8 +269,8 @@ public class AccAdd
     {
         try
         {
-            String databasePath = "jdbc:sqlite:./System/Private/Conch/mud.dbx";
-            String sqlCommand = "INSERT INTO FCAD(Name, Username, Password, SecurityKey, PIN, Administrator) VALUES(?,?,?,?,?,?)";
+            String databasePath = "jdbc:sqlite:./System/Conch/Private/mud.dbx";
+            String sqlCommand = "INSERT INTO MUD(Name, Username, Password, SecurityKey, PIN, Administrator) VALUES(?,?,?,?,?,?)";
 
             Class.forName("org.sqlite.JDBC");
             Connection dbConnection = DriverManager.getConnection(databasePath);
@@ -294,19 +309,20 @@ public class AccAdd
         while(!getPIN());
 
         displayDetails();
-        console.readLine("Press ENTER to continue.");
         addAccountLogic();
     }
 
     public void setupAdminAccount()throws Exception
     {
         _newAccountAdmin = true;
+        _newAccountName = "Administrator";
         _newAccountUsername = new Conch.API.Scorpion.Cryptography().stringToSHA3_256("Administrator");
 
         while(!getPassword());
         while(!getSecurityKey());
         while(!getPIN());
 
+        displayDetails();
         addAccountLogic();
     }
 }

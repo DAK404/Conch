@@ -16,48 +16,42 @@
 
 package Conch.Core;
 
-//Import the Java IO classes
+//Import the required Java IO classes
 import java.io.File;
 import java.io.Console;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
-//Import the Java Util classes
+//Import the required Java NIO classes
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+
+//Import the required Java Util classes
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-//Import the Conch classes
+import java.net.URL;
+
+//Import the required Conch classes
 import Conch.API.BuildInfo;
 import Conch.API.PrintStreams;
 
 public class Loader
 {
-    private Console console = System.console();
+    static
+    {
+        BuildInfo.viewBuildInfo();
+    }
 
-    //generic string to print the status of the program on screen
-    //private String _status = "Failed";
+    private boolean _repair = false;
+
+    private Console console = System.console();
 
     //collect the list of file paths in the Conch environment
     private static List<String> filePaths = new  ArrayList<String>();
-
-    //a block to handle the code to check if the file integrity is matching with the filelist
-    static
-    {
-        try
-        {
-            //Run the file checking logic here before running the boot args check
-            //BuildInfo.clearScreen();
-            BuildInfo.viewBuildInfo();
-            if(! new Loader().integrityCheck())
-            {
-                //pass the control to the setup program
-            }
-        }
-        catch(Exception e)
-        {
-
-        }
-    }
 
     //Main logic of the loader program
     public static void main(String[] args)throws Exception
@@ -65,24 +59,218 @@ public class Loader
         System.gc();
         switch(args[0].toLowerCase())
         {
-            case "debug_ps":
-                new Loader().debugPS();
-                break;
-
             case "normal":
                 break;
 
+            case "repair":
+                new Loader().repairMode();                
+                System.exit(0xAFF014);
+                
             default:
                 System.exit(0x1A0000);
         }
+
+        if(!new Loader().systemAsserts())
+            new Conch.Core.Setup().setupLogic();
+        
+        if(!new Loader().integrityCheck())
+            System.exit(0x1A0104);
+
         new Loader().debugShell();
+    }
+
+    private void repairMode()
+    {
+        try
+        {
+            _repair = true;
+            System.out.println("Booted Shell to Repair Mode.");
+            
+            while(true)
+                repairModeShell(console.readLine("!REPAIR@CONCH> "));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void repairModeShell(String cmd)
+    {
+        try
+        {
+            String[] splitCmd = cmd.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+            switch(splitCmd[0].toLowerCase())
+            {
+                case "exit":
+                    System.exit(0);
+                    break;
+
+                case "scan":
+                    System.out.println("Scanning Files...");
+                    checkFiles();
+                    break;
+
+                case "restore":
+                    System.out.println("Deleting Binaries...");
+                    deleteExistingBinaries(new File("./Conch"));
+
+                    if(downloadBuildFromCloud())
+                        if(installBuild())
+                            System.out.println("Restore Complete.");
+                        else
+                            System.out.println("Restore Failed.");
+                    else
+                        System.out.println("Download Failed.");
+
+                    break;
+
+                default:
+                    System.out.println("Invalid Command.");
+                    break;
+            }
+        }
+        catch(Exception E)
+        {
+
+        }
+    }
+
+    private boolean downloadBuildFromCloud()throws Exception
+    {
+        System.out.println("Downloading Build From Cloud...");
+        return downloadUsingNIO("https://gitreleases.dev/gh/DAK404/Conch/latest/Conch.zip", "Update.zip");
+    }
+
+    private final boolean downloadUsingNIO(String urlStr, String file) throws Exception
+    {
+        try
+        {
+            URL website = new URL(urlStr);
+            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            fos.close();
+            rbc.close();
+            System.gc();
+            return true;
+        }
+        catch (Exception E)
+        {
+            return false;
+        }
+    }
+
+    private final void deleteExistingBinaries(File delFile)throws Exception
+    {
+        if (delFile.listFiles() != null)
+        {
+            for (File fn : delFile.listFiles())
+                deleteExistingBinaries(fn);
+        }
+        delFile.delete();
+    }
+
+    private final boolean installBuild()
+    {
+        System.out.println("Installing...");
+        boolean status = false;
+        try
+        {
+            String _currentDirectory = System.getProperty("user.dir");
+            status = unzipper("./Update.zip", _currentDirectory);
+        }
+        catch(Exception e)
+        {
+            status = false;
+        }
+        return status;
+    }
+
+    private final boolean unzipper(String updateFile, String targetDirectory)
+    {
+        boolean status = false;
+        try
+        {
+            //Initialize a byte stream to read the update file
+            byte[] buffer = new byte[1024];
+
+            //create output directory is not exists
+            File folder = new File(targetDirectory);
+
+            //Create the directory if it does not exist
+            if (!folder.exists())
+            folder.mkdir();
+
+            //get the zip file content
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(updateFile));
+
+            //get the zipped file list entry
+            ZipEntry ze = zis.getNextEntry();
+            while (ze != null)
+            {
+                if (ze.isDirectory())
+                {
+                    ze = zis.getNextEntry();
+                    continue;
+                }
+
+                String fileName = ze.getName();
+                File newFile = new File(targetDirectory + File.separator + fileName);
+
+                if (newFile.exists())
+                {
+                    newFile.delete();
+                    continue;
+                }
+
+                //Print the file being extracted
+                System.out.println("Installed : " + newFile.getAbsoluteFile());
+                
+                //create all non exists folders
+                //else you will encounter FileNotFoundException
+
+                new File(newFile.getParent()).mkdirs();
+                FileOutputStream fos = new FileOutputStream(newFile);
+
+                int len;
+                while ((len = zis.read(buffer)) > 0)
+                fos.write(buffer, 0, len);
+
+                fos.close();
+                ze = zis.getNextEntry();
+            }
+
+            zis.closeEntry();
+            zis.close();
+
+            //Delete the redundant update file
+            new File(updateFile).delete();
+
+            //Run the garbage collector to free up memory
+            System.gc();
+
+            status = true;
+        }
+        catch(Exception e)
+        {
+            status = false;
+        }
+        return status;
     }
 
     private void debugShell()throws Exception
     {
-        PrintStreams.printInfo("Shell loaded successfully!");
-        while(true)
-            debugShellCmdProcessor(console.readLine("??? ~DBG_CONCH > "));
+        try
+        {
+            PrintStreams.printInfo("Shell loaded successfully!");
+            while(true)
+                debugShellCmdProcessor(console.readLine("??? ~DBG_CONCH > "));
+        }
+        catch(Exception e)
+        {
+            System.exit(0x1A0104);
+        }
     }
 
     private void debugShellCmdProcessor(String cmd)throws Exception
@@ -91,20 +279,15 @@ public class Loader
 
         switch(splitCmd[0].toLowerCase())
         {
+            case "login":
+            break;
+
             case "doc":
                 PrintStreams.printInfo("Help Document Viewer 1.0: WORK IN PROGRESS...");
                 break;
 
-            case "update":
-                new Conch.API.FileFlex.Parcel.UpdateLogic().updateProgram();
-                break;
-
             case "clear":
                 BuildInfo.viewBuildInfo();
-                break;
-
-            case "fileflex":
-                new Conch.API.FileFlex.FlexLogic().fileFlex();
                 break;
 
             case "exit":
@@ -122,28 +305,11 @@ public class Loader
         }
     }
 
-    private void debugPS()
-    {
-        BuildInfo.viewBuildInfo();
-
-        System.out.println("TESTING ALL CONCH PRINTSTREAMS");
-        System.out.println("------------------------------\n");
-
-        PrintStreams.printInfo("INFORMATION PRINTSTREAM TEST");
-        PrintStreams.printAttention("ATTENTION PRINTSTREAM TEST");
-        PrintStreams.printWarning("WARNING PRINTSTREAM TEST");
-        PrintStreams.printError("ERROR PRINTSTREAM TEST");
-        PrintStreams.println("NORMAL PRINTSTREAM TEST");
-    }
-
     //A method which handles the logics and sublogics to verify if the program integrity is true.
     private boolean integrityCheck()throws Exception
     {
         boolean status = false;
-
-        if(!systemAsserts())
-            new Conch.Core.Setup().setupLogic();
-
+        
         //list all the files in the Conch directories
         //Load the hash filelist. If the file list is not found, download the latest build by default
 
@@ -152,7 +318,6 @@ public class Loader
         PrintStreams.printAttention("KERNEL INTEGRITY: " + (status?"OK":"FAILED"));
 
         return status;
-
     }
 
     private final boolean systemAsserts()throws Exception
@@ -160,7 +325,7 @@ public class Loader
         boolean status = true;
         try
         {
-            String [] fileList = {"./.Manifest/Manifest.m1", "./System/Conch", "./Users/Conch"};
+            String [] fileList = {"./.Manifest/Conch/Manifest.m1", "./System/Conch", "./System/Conch/Public", "./System/Conch/Private", "./Users/Conch"};
             for(String asserts : fileList)
             {
                 if(! new File(asserts).exists())
@@ -190,7 +355,7 @@ public class Loader
             System.out.println("Checking Kernel Integrity...\n");
 
             //check if the manifest file exists
-            if(!new File("./.Manifest/Conch").exists() || !new File("./.Manifest/Conch/Manifest.m1").exists())
+            if(!new File("./.Manifest/Conch").exists() | !new File("./.Manifest/Conch/Manifest.m1").exists())
             {
                 PrintStreams.printError("MANIFEST FILE PARSING ERROR: 0x00A101");
                 System.out.println("The Manifest file is either corrupt, malformed, missing or cannot be loaded.");
@@ -251,8 +416,9 @@ public class Loader
             for (File f: filesList)
             {
                 //Dont bother checking the manifest folder content hashes
-                if(ignoreFiles(f.getName()))
-                    continue;
+                if(!_repair)
+                    if(ignoreFiles(f.getName()))
+                        continue;
                 
                 if (f.isDirectory())
                     listAllFiles(f);
@@ -273,7 +439,7 @@ public class Loader
     private boolean ignoreFiles(String fileName)
     {
         boolean status = false;
-        String[] ignoreList = {".Manifest", "System", "Users", "JRE", "BootShell.cmd"};
+        String[] ignoreList = {".Manifest", "System", "Users", "org", "JRE", "BootShell.cmd"};
         for(String files : ignoreList)
         {
             if(fileName.equalsIgnoreCase(files))
