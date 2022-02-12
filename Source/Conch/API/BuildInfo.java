@@ -1,3 +1,19 @@
+// ========================================================================================= //
+// | ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION! | //
+// ========================================================================================= //
+//                                                                                           //
+//      THE SOURCE CODE FOR THE PROGRAM USES THE GNU GPL 3.0 LICENSE. IF YOU DECIDE TO       //
+//     MODIFY, COMPILE AND DISTRIBUTE THE SOURCE CODE, YOU MUST INCLUDE THIS DISCLAIMER,     //
+//     ANY MODIFICATIONS, AND ANY CHANGES MADE TO THE PROGRAM. THE GNU GPL 3.0 LICENSE       //
+//     CAN BE FOUND HERE: https://www.gnu.org/licenses/gpl-3.0.en.html                       //
+//                                                                                           //
+//     NOTE: THE SOFTWARE MUST HAVE A LINK TO THE PROGRAM SOURCE CODE OR MUST BE BUNDLED     //
+//     ALONG WITH THE PROGRAM BINARIES. IF YOU DO NOT AGREE TO THE TERMS, DO NOT USE THE     //
+//      SOURCE CODE OR THE BINARIES. THE SOURCE CODE MODIFICATIONS WILL INHERIT THE GNU      //
+//     GPL 3.0 LICENSE AND THE CODE MUST BE MADE OPEN SOURCE.                                //
+//                                                                                           //
+// ========================================================================================= //
+
 package Conch.API;
 
 /**
@@ -16,13 +32,12 @@ public class BuildInfo
      \\ \\ | |   | | | ||  \\| || |    | |_| | / /
      / / | |___| |_| || |\\  || |___ |  _  | \\ \\
     /_/   \\____|\\___/ |_| \\_| \\____||_| |_|  \\_\\
-
     """;
 
-    public static String _Version = "0.0.1";
-    public static String _BuildDate = "$dyn_date_info_missing";
-    public static String _BuildID = "$dyn_ID_info_missing";
-    public static String _BuildType = "DEBUG";
+    public static String _Version = "1.0.0";
+    public static String _BuildDate = "12-Feb-2022";
+    public static String _BuildID = "NION_12_FEB_22_2120_ALPHA";
+    public static String _BuildType = "ALPHA";
 
     public static void viewBuildInfo()
     {

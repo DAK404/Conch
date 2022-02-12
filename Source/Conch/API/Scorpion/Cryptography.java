@@ -1,3 +1,19 @@
+// ========================================================================================= //
+// | ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION!     ATTENTION! | //
+// ========================================================================================= //
+//                                                                                           //
+//      THE SOURCE CODE FOR THE PROGRAM USES THE GNU GPL 3.0 LICENSE. IF YOU DECIDE TO       //
+//     MODIFY, COMPILE AND DISTRIBUTE THE SOURCE CODE, YOU MUST INCLUDE THIS DISCLAIMER,     //
+//     ANY MODIFICATIONS, AND ANY CHANGES MADE TO THE PROGRAM. THE GNU GPL 3.0 LICENSE       //
+//     CAN BE FOUND HERE: https://www.gnu.org/licenses/gpl-3.0.en.html                       //
+//                                                                                           //
+//     NOTE: THE SOFTWARE MUST HAVE A LINK TO THE PROGRAM SOURCE CODE OR MUST BE BUNDLED     //
+//     ALONG WITH THE PROGRAM BINARIES. IF YOU DO NOT AGREE TO THE TERMS, DO NOT USE THE     //
+//      SOURCE CODE OR THE BINARIES. THE SOURCE CODE MODIFICATIONS WILL INHERIT THE GNU      //
+//     GPL 3.0 LICENSE AND THE CODE MUST BE MADE OPEN SOURCE.                                //
+//                                                                                           //
+// ========================================================================================= //
+
 package Conch.API.Scorpion;
 
 //Import the required Java IO classes
@@ -9,11 +25,16 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public record Cryptography() 
+public record Cryptography()
 {
     // ------------------------------------------------------------------------------------ //
     //                                  PUBLIC API METHODS                                  //
     // ------------------------------------------------------------------------------------ //
+
+    ///////////////////////////////////////////////////////////////
+    // 
+    ///////////////////////////////////////////////////////////////
+
 
     /**
     * Hashing API which will convert a string to an MD5 hash
@@ -25,6 +46,18 @@ public record Cryptography()
     public final String stringToMD5(String input)throws Exception
     {
         return hashString(input, "MD5");
+    }
+
+    /**
+    * Hashing API which will convert a string to an SHA3-256 hash
+    *
+    * @param input : The String that is to be encoded
+    * @return String : Returns the SHA3-256 hash
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
+    public final String stringToSHA_256(String input) throws Exception
+    {
+        return hashString(input, "SHA-256");
     }
 
     /**
@@ -49,6 +82,18 @@ public record Cryptography()
     public final String fileToMD5(String fileName) throws Exception
     {
         return hashFile(new File(fileName), "MD5");
+    }
+
+    /**
+    * Hashing API which will return the SHA3-256 hash value of a given file
+    *
+    * @param fileName : The name of the file to be hashed
+    * @return String : Returns the SHA3-256 hash
+    * @throws Exception : Handle exceptions thrown during program runtime.
+    */
+    public final String fileToSHA_256(String fileName) throws Exception
+    {
+        return hashFile(new File(fileName), "SHA-256");
     }
 
     /**
