@@ -265,7 +265,7 @@ public class Loader
         {
             PrintStreams.printInfo("Shell loaded successfully!");
             while(true)
-                debugShellCmdProcessor(console.readLine("??? ~DBG_CONCH > "));
+                debugShellCmdProcessor(console.readLine("Guest@ProgramLoader :: X > "));
         }
         catch(Exception e)
         {
@@ -278,7 +278,7 @@ public class Loader
         String[] splitCmd = cmd.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
 
         switch(splitCmd[0].toLowerCase())
-        {
+        {           
             case "login":
                 new Conch.Core.ConchLogic().startConch();
                 break;

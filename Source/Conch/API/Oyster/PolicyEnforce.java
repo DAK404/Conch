@@ -38,7 +38,7 @@ public class PolicyEnforce
             {
                 //If the policy value returned is false, print an error statement about the policy value
                 case "off":
-                Conch.API.PrintStreams.printAttention("This module access is denied due to the policy configuration.\nPlease contact the Administrator for more information.");
+                Conch.API.PrintStreams.printAttention("Policy Enforcement System -> Cannot access module due to the configuration.\nContact the Administrator for more information.");
                 console.readLine();
                 break;
 
@@ -49,13 +49,13 @@ public class PolicyEnforce
 
                 //When a policy is not found or cannot be loaded, display an error message about the misconfigured policy
                 case "error":
-                Conch.API.PrintStreams.printWarning("Module Policy is not configured. Please contact the system administrator to initialize the policy.");
+                Conch.API.PrintStreams.printWarning("Policy Enforcement System -> Malformed or Misconfigured Policy detected!\nContact the Administrator for more information.");
                 console.readLine();
                 break;
 
                 //Handle any other inputs returned after checking the policy
                 default:
-                Conch.API.PrintStreams.printError("POLICY CONFIGURATION ERROR!");
+                Conch.API.PrintStreams.printError("Policy Enforcement System -> Unrecognized Policy value.\nContact the Administrator for more information.");
                 console.readLine();
                 break;
             }

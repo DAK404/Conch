@@ -14,6 +14,8 @@ class ConchLogic
     private String _username = "";
     private String _PIN = "";
     private String _systemName = "";
+    private String _tempUsername = "";
+    private char _promptChar = '*';
 
     Console console = System.console();
 
@@ -36,8 +38,10 @@ class ConchLogic
             while(! login() & _attemptsRemaining > 0 & _attemptsRemaining <= 5)
                 decrementAttempts();
             _attemptsRemaining = 5;
+            _username = _tempUsername;
             System.gc();
             getUserDetails();
+            _promptChar = _admin?'!':'*';
 
             //start execution of Conch
             startShell();
@@ -51,10 +55,10 @@ class ConchLogic
     private boolean login()throws Exception
     {
         verViewerMM();
-        String username = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(console.readLine("Username: "));
+        _tempUsername = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(console.readLine("Username: "));
         String password = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
         String key = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
-        return challenge(username, password, key);
+        return challenge(_tempUsername, password, key);
     }
 
     private boolean challenge(String username, String password, String key)
@@ -75,8 +79,9 @@ class ConchLogic
     {
         --_attemptsRemaining;
 
-        if(_attemptsRemaining == 1)
+        if(_attemptsRemaining == 0)
         {
+            PrintStreams.printError("Too Many Attempts! Locking Inputs for 10 minutes...");
             Thread.sleep(900000);
             _attemptsRemaining = 1;
         }
@@ -84,7 +89,7 @@ class ConchLogic
         console.readLine();
     }
 
-    private void getUserDetails()
+    private void getUserDetails()throws Exception
     {
         _name = new Conch.API.Coral.LoginAuth(_username).getNameLogic();
         _admin = new Conch.API.Coral.LoginAuth(_username).checkPrivilegeLogic();
@@ -95,7 +100,7 @@ class ConchLogic
     {
         verViewerMM();
         while(true)
-            commandProcessor(console.readLine(_name + "@" + _systemName + "> "));
+            commandProcessor(console.readLine(_name + "@" + _systemName + _promptChar + "> "));
     }
 
     private void commandProcessor(String cmd)
@@ -106,6 +111,14 @@ class ConchLogic
 
             switch(cmdArr[0])
             {
+                case "fileflex":
+                    new Conch.API.FileFlex.FlexLogic().fileFlex(_username);
+                    break;
+
+                case "update":
+                    new Conch.API.FileFlex.Parcel.UpdateLogic().updateProgram();
+                    break;
+
                 case "exit":
                     System.exit(0);
                     break;
@@ -118,6 +131,10 @@ class ConchLogic
                     verViewerMM();
                     break;
 
+                case "policy":
+                    new Conch.API.Oyster.PolicyEditor().policyManager();
+                    break;
+
                 case "":
                     break;
 
@@ -127,6 +144,19 @@ class ConchLogic
 
                 case "lock":
                     lockConsole();
+                    break;
+
+                case "usermgmt":
+                    switch(cmdArr[1])
+                    {
+                        case "add":
+                            new Conch.API.Coral.AccAdd().addAccount();
+                            break;
+
+                        case "delete":
+                            new Conch.API.Coral.AccDel().userDeletionLogic(_username);
+                            break;
+                    }
                     break;
                 
                 default:
@@ -142,12 +172,18 @@ class ConchLogic
 
     private void elevatePermissions()throws Exception
     {
+        if(_admin)
+        {
+            PrintStreams.printAttention("Elevated Permissions Already Granted! Aborting...");
+            return;
+        }
         String adminUsername = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(console.readLine("Username: "));
         String adminPassword = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
         String adminKey = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
 
         _admin = challenge(adminUsername, adminPassword, adminKey) & new Conch.API.Coral.LoginAuth(adminUsername).checkPrivilegeLogic()?true:false;
         PrintStreams.printAttention("Privilege Elevation: " + (_admin?"Successful":"Failed"));
+        _promptChar = _admin?'!':'*';
     }
 
     private final void lockConsole()throws Exception
@@ -170,8 +206,11 @@ class ConchLogic
 
     private void verViewerMM()
     {
+        BuildInfo.clearScreen();
         System.out.println(BuildInfo._Branding);
-        System.out.println("------------------------------\n");
+        System.out.println("Version: " + BuildInfo._Version);
+        System.out.println("--------------------------------------------\n");
         System.out.println("Administrator Privileges: " + (_admin?"Granted":"Not Granted"));
+        System.out.println();
     }
 }

@@ -73,10 +73,15 @@ public final class FileRead
     * @param dir
     * @throws Exception : Handle exceptions thrown during program runtime.
     */
-    public final void readUserFile(String fileName, String dir)throws Exception
+    public final void readUserFile(String fileName, String dir, String usn)throws Exception
     {
         try
         {
+            if(! new Conch.API.Oyster.PolicyEnforce().checkPolicy("read") & ! new Conch.API.Coral.LoginAuth(usn).checkPrivilegeLogic())
+            {
+                Conch.API.PrintStreams.printError("Policy Enforcement System -> Cannot access module due to the configuration.\nContact the Administrator for more information.");
+                return;
+            }
             // if(! new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("read") )
             // return;
             if(checkFileValidity(fileName))

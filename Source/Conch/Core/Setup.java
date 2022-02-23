@@ -183,7 +183,8 @@ public class Setup
             }
 
             String databasePath = "jdbc:sqlite:./System/Conch/Private/mud.dbx";
-            String sqlCommand = "CREATE TABLE IF NOT EXISTS MUD(Username text PRIMARY KEY, Name text NOT NULL, Password text NOT NULL, SecurityKey text NOT NULL, PIN text NOT NULL, Administrator text NOT NULL);";
+            
+            String sqlCommand = "CREATE TABLE IF NOT EXISTS MUD (Username TEXT, Name TEXT NOT NULL, Password TEXT NOT NULL, SecurityKey TEXT NOT NULL, PIN	TEXT NOT NULL, Privileges TEXT NOT NULL, PRIMARY KEY(Username));";
 
             Class.forName("org.sqlite.JDBC");
             Connection dbConnection = DriverManager.getConnection(databasePath);

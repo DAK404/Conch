@@ -49,7 +49,7 @@ public class BuildInfo
             System.out.println(" Build Date : " + _BuildDate);
             System.out.println(" Build ID   : " + _BuildID);
             System.out.println(" Build Type : " + _BuildType);
-            System.out.println("------------------------------\n");
+            System.out.println("--------------------------------------------\n");
         }
         catch(Exception e)
         {

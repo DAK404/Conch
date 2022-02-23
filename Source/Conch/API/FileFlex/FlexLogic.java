@@ -23,6 +23,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import Conch.API.BuildInfo;
+import Conch.API.PrintStreams;
+
 public class FlexLogic
 {
     ///////////////////////////////////////////////////////////////
@@ -30,25 +33,25 @@ public class FlexLogic
     ///////////////////////////////////////////////////////////////
 
     private final String ARGUMENT_MISMATCH = """
-    [E] : Invalid argument length.
+    Invalid argument length.
     """;
     private final String ARGUMENT_PATH_INVALID = """
-    [A] : The source/destination path/file does not exist.
+    The source/destination path/file does not exist.
     """;
     private final String DEST_FILE_EXISTS = """
-    [A] : A file with the same name exists in the destination path.
+    A file with the same name exists in the destination path.
     """;
 
     private final String SOURCE_DEST_SAME = """
-    [A] : The source and destination paths are the same.
+    The source and destination paths are the same.
     """;
 
     private final String INVALID_COMMAND = """
-    [E] : COMMAND NOT FOUND
+    COMMAND NOT FOUND
     """;
 
     private final String FILE_EXISTS = """
-    [E] : A file/directory with the same name already exists.
+    A file/directory with the same name already exists.
     """;
 
     // private final String <reserved for future use> = """
@@ -62,56 +65,78 @@ public class FlexLogic
 
     private Console console = System.console();
 
-    public void fileFlex()throws Exception
+    public void fileFlex(String usn)throws Exception
     {
-        login();
+        if(! new Conch.API.Oyster.PolicyEnforce().checkPolicy("fileflex") & ! new Conch.API.Coral.LoginAuth(usn).checkPrivilegeLogic())
+        {
+            PrintStreams.printError("Policy Enforcement System -> Cannot access module due to the configuration.\nContact the Administrator for more information.");
+            return;
+        }
+
+        verViewerFF();
+        _username = usn;
+        _name = new Conch.API.Coral.LoginAuth(_username).getNameLogic();
+
+        if(!login())
+            return;
 
         String temp;
+
+        verViewerFF();
         do
         {
-            String displayShell = _name + "@" + _currentDirectory.replace(_username, _name) + "> ";
+            String displayShell = _name + "@" + _currentDirectory.replace(_username, _name) + ":] ";
             temp = console.readLine(displayShell);
             fileFlexLogic(temp);
         }while(!temp.equalsIgnoreCase("exit"));
-
-        deletionLogic(new File("./Users"));
     }
 
-    private final void login()throws Exception
+    private final boolean login()throws Exception
     {
+        boolean status = false;
         try
         {
-            _username = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(console.readLine("DEBUG: ENTER USERNAME> "));
-            _name = console.readLine("DEBUG: ENTER NAME> ");
+            System.out.println("Username: " + _name);
+            String password = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
+            String securityKey = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(console.readLine("Security Key: "));
 
-            _currentDirectory = "./Users/Conch/" + _username + '/';
-
-            new File("./Users/Conch/"+_username).mkdirs();
+            if(! new Conch.API.Coral.LoginAuth(_username).authenticationLogic(password, securityKey))
+            {
+                PrintStreams.printError("Authentication Failed. FileFlex Access Denied.");
+                status = false;
+            }
+            else
+            {
+                status = true;
+                _currentDirectory = "./Users/Conch/" + _username + '/';
+            }
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
+        return status;
     }
 
     private void fileFlexLogic(String input)throws Exception
     {
         String[] cmd = input.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+
         switch(cmd[0])
         {
             ///////////////////////////////////////////////////////////////
             // Logic for navigation commands
             ///////////////////////////////////////////////////////////////
 
-            case "reset_pwd":
+            case "home":
             resetToHomeDir();
             break;
 
             case "cd":
             if(cmd.length < 2)
             {
-                System.out.println(ARGUMENT_MISMATCH);
-                System.out.println("Syntax:\ncd <path>");
+                PrintStreams.printError(ARGUMENT_MISMATCH);
+                PrintStreams.printAttention("Syntax:\ncd <path>");
             }
             else
             changeDir(cmd[1]);
@@ -137,8 +162,8 @@ public class FlexLogic
             case "mkdir":
             if(cmd.length < 2)
             {
-                System.out.println(ARGUMENT_MISMATCH);
-                System.out.println("Syntax:\nmkdir <directory_name>");
+                PrintStreams.printError(ARGUMENT_MISMATCH);
+                PrintStreams.printAttention("Syntax:\nmkdir <directory_name>");
             }
             else
             createDirectory(cmd[1]);
@@ -155,8 +180,8 @@ public class FlexLogic
             case "del":
             if(cmd.length < 2)
             {
-                System.out.println(ARGUMENT_MISMATCH);
-                System.out.println("Syntax:\nrm <file/directory>\ndel <file/directory>");
+                PrintStreams.printError(ARGUMENT_MISMATCH);
+                PrintStreams.printAttention("Syntax:\nrm <file/directory>\ndel <file/directory>");
             }
             else
             deleteFilesDirs(cmd[1]);
@@ -169,8 +194,8 @@ public class FlexLogic
             case "copy":
             if(cmd.length < 3)
             {
-                System.out.println(ARGUMENT_MISMATCH);
-                System.out.println("Syntax:\ncp <source> <destination>\ncopy <source> <destination>");
+                PrintStreams.printError(ARGUMENT_MISMATCH);
+                PrintStreams.printAttention("Syntax:\ncp <source> <destination>\ncopy <source> <destination>");
             }
             else
             copyMove(false, cmd[1], cmd[2]);
@@ -183,8 +208,8 @@ public class FlexLogic
             case "move":
             if(cmd.length < 3)
             {
-                System.out.println(ARGUMENT_MISMATCH);
-                System.out.println("Syntax:\nmv <source> <destination>\nmove <source> <destination>");
+                PrintStreams.printError(ARGUMENT_MISMATCH);
+                PrintStreams.printAttention("Syntax:\nmv <source> <destination>\nmove <source> <destination>");
             }
             else
             copyMove(true, cmd[1], cmd[2]);
@@ -196,8 +221,8 @@ public class FlexLogic
             case "rename":
             if(cmd.length < 3)
             {
-                System.out.println(ARGUMENT_MISMATCH);
-                System.out.println("Syntax:\nrename <old_name> <new_name>");
+                PrintStreams.printError(ARGUMENT_MISMATCH);
+                PrintStreams.printAttention("Syntax:\nrename <old_name> <new_name>");
             }
             else
             renameFilesDirs(cmd[1], cmd[2]);
@@ -207,18 +232,42 @@ public class FlexLogic
             // Miscellaneous logic to handle inputs
             ///////////////////////////////////////////////////////////////
 
+            // --------------------------------------------------------- //
+            // Logic to read and write a file
+            // --------------------------------------------------------- //
+
+            case "read":
+                if(cmd.length < 1)
+                {
+                    PrintStreams.printError(ARGUMENT_MISMATCH);
+                    PrintStreams.printAttention("Syntax:\nread <file_name>");
+                }
+                else
+                new Conch.API.FileFlex.FileRead().readUserFile(cmd[1], _currentDirectory, _username);
+                break;
+
+            case "write":
+                if(cmd.length < 1)
+                {
+                    PrintStreams.printError(ARGUMENT_MISMATCH);
+                    PrintStreams.printAttention("Syntax:\nwrite <file_name>");
+                }
+                else
+                    new Conch.API.FileFlex.FileWrite().editFile(cmd[1], _currentDirectory, _username);
+                break;
+
             case "":
             break;
 
             case "clear":
-            Conch.API.BuildInfo.viewBuildInfo();
+            verViewerFF();
             break;
 
             case "exit":
             break;
 
             default:
-            System.out.println(INVALID_COMMAND);
+            PrintStreams.printError(INVALID_COMMAND);
             break;
         }
     }
@@ -241,7 +290,7 @@ public class FlexLogic
             if(checkFile(fileName))
             _currentDirectory=fileName;
             else
-            System.out.println(ARGUMENT_PATH_INVALID);
+            PrintStreams.printError(ARGUMENT_PATH_INVALID);
         }
         catch(Exception e)
         {
@@ -264,7 +313,7 @@ public class FlexLogic
 
             if(_currentDirectory.equals("./Users/Conch/"))
             {
-                System.out.println("[W] : Permission Denied.");
+                PrintStreams.printWarning("Permission Denied! Returning to User Home Directory...");
                 resetToHomeDir();
             }
             System.gc();
@@ -351,7 +400,7 @@ public class FlexLogic
             System.out.println();
         }
         else
-        System.out.println(ARGUMENT_PATH_INVALID);
+        PrintStreams.printError(ARGUMENT_PATH_INVALID);
         System.gc();
     }
 
@@ -366,12 +415,12 @@ public class FlexLogic
             if(checkFile(_currentDirectory + "/" + sourceFile))
             {
                 if(sourceFile.equalsIgnoreCase(destinationFile))
-                System.out.println(SOURCE_DEST_SAME);
+                PrintStreams.printError(SOURCE_DEST_SAME);
 
                 else
                 {
                     if(checkFile(destinationFile))
-                    System.out.println(DEST_FILE_EXISTS);
+                    PrintStreams.printError(DEST_FILE_EXISTS);
                     else
                     copyMoveLogic(new File(_currentDirectory + sourceFile), new File(_currentDirectory + destinationFile + "/" + sourceFile));
 
@@ -379,7 +428,7 @@ public class FlexLogic
                 }
             }
             else
-            System.out.println(ARGUMENT_PATH_INVALID);
+            PrintStreams.printError(ARGUMENT_PATH_INVALID);
         }
         catch(Exception e)
         {
@@ -440,7 +489,7 @@ public class FlexLogic
                 del.delete();
             }
             else
-            System.out.println(ARGUMENT_PATH_INVALID);
+            PrintStreams.printError(ARGUMENT_PATH_INVALID);
         }
         catch(Exception e)
         {
@@ -476,7 +525,7 @@ public class FlexLogic
             fileName = _currentDirectory + '/' + fileName;
 
             if(checkFile(fileName))
-            System.out.println(FILE_EXISTS);
+            PrintStreams.printAttention(FILE_EXISTS);
             else
             new File(fileName).mkdir();
         }
@@ -500,7 +549,7 @@ public class FlexLogic
             if(checkFile(oldFileName))
             {
                 if(checkFile(newFileName))
-                System.out.println(DEST_FILE_EXISTS);
+                PrintStreams.printAttention(DEST_FILE_EXISTS);
                 else
                 {
                     File oldFile = new File(oldFileName);
@@ -509,11 +558,20 @@ public class FlexLogic
                 }
             }
             else
-            System.out.println(ARGUMENT_PATH_INVALID);
+            PrintStreams.printError(ARGUMENT_PATH_INVALID);
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
+    }
+
+    private void verViewerFF()
+    {
+        BuildInfo.clearScreen();
+        System.out.println(BuildInfo._Branding);
+        System.out.println("Version: " + BuildInfo._Version);
+        System.out.println("--------------------------------------------\n");
+        System.out.println("FileFlex File Management System 1.4\n");
     }
 }

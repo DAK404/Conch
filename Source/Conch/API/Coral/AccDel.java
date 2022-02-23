@@ -27,7 +27,7 @@ import java.sql.PreparedStatement;
 
 import Conch.API.PrintStreams;
 
-class AccDel
+public class AccDel
 {
     private String _currentUsername = "";
 

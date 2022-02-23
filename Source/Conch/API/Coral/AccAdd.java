@@ -75,7 +75,7 @@ public class AccAdd
         return status;
     }
 
-    private boolean getAdminStatus()
+    private boolean getAdminStatus()throws Exception
     {
         return new Conch.API.Coral.LoginAuth(_currentUsername).checkPrivilegeLogic();
     }
@@ -180,9 +180,9 @@ public class AccAdd
         * Password is recommended to have special characters and numbers
         -----------------------------------
 
-        Account Password> """;
+        Account Password>""";
         
-        _newAccountPassword = String.valueOf(console.readPassword(message));
+        _newAccountPassword = String.valueOf(console.readPassword(message + " "));
         String confirmPassword = String.valueOf(console.readPassword("Confirm Password> "));
 
         if(_newAccountPassword == null | _newAccountPassword.equals("") | _newAccountPassword.length() < 8 | !(_newAccountPassword.equals(confirmPassword)))
@@ -214,7 +214,7 @@ public class AccAdd
 
         Account Security Key> """;
 
-        _newAccountSecurityKey = String.valueOf(console.readPassword(message));
+        _newAccountSecurityKey = String.valueOf(console.readPassword(message + " "));
         String confirmKey = String.valueOf(console.readPassword("Confirm Security Key> "));
 
         if(_newAccountSecurityKey == null | !(_newAccountSecurityKey.equals(confirmKey)))
@@ -246,7 +246,7 @@ public class AccAdd
 
         Account PIN> """;
 
-        _newAccountPIN = String.valueOf(console.readPassword(message));
+        _newAccountPIN = String.valueOf(console.readPassword(message + " "));
         String confirmPIN = String.valueOf(console.readPassword("Confirm PIN> "));
 
         if(_newAccountPIN == null | !(_newAccountPIN.equals(confirmPIN)))
@@ -270,14 +270,14 @@ public class AccAdd
         try
         {
             String databasePath = "jdbc:sqlite:./System/Conch/Private/mud.dbx";
-            String sqlCommand = "INSERT INTO MUD(Name, Username, Password, SecurityKey, PIN, Administrator) VALUES(?,?,?,?,?,?)";
+            String sqlCommand = "INSERT INTO MUD(Username, Name, Password, SecurityKey, PIN, Privileges) VALUES(?,?,?,?,?,?)";
 
             Class.forName("org.sqlite.JDBC");
             Connection dbConnection = DriverManager.getConnection(databasePath);
             PreparedStatement preparedStatement = dbConnection.prepareStatement(sqlCommand);
 
-            preparedStatement.setString(1, _newAccountName);
-            preparedStatement.setString(2, _newAccountUsername);
+            preparedStatement.setString(1, _newAccountUsername);
+            preparedStatement.setString(2, _newAccountName);
             preparedStatement.setString(3, _newAccountPassword);
             preparedStatement.setString(4, _newAccountSecurityKey);
             preparedStatement.setString(5, _newAccountPIN);

@@ -34,7 +34,7 @@ public class PolicyEditor
     private Console console = System.console();
     private Properties props = null;
 
-    public void policyManager()
+    public void policyManager()throws Exception
     {
         if(!login())
         {
@@ -70,7 +70,7 @@ public class PolicyEditor
         return status;
     }
 
-    private boolean getAdminStatus()
+    private boolean getAdminStatus()throws Exception
     {
         return new Conch.API.Coral.LoginAuth(_currentUsername).checkPrivilegeLogic();
     }

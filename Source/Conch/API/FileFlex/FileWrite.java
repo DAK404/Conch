@@ -81,10 +81,15 @@ public class FileWrite
     * @param fileName
     * @param dir
     */
-    public final void editFile(String fileName, String dir)
+    public final void editFile(String fileName, String dir, String usn)
     {
         try
         {
+            if(! new Conch.API.Oyster.PolicyEnforce().checkPolicy("write") & ! new Conch.API.Coral.LoginAuth(usn).checkPrivilegeLogic())
+            {
+                Conch.API.PrintStreams.printError("Policy Enforcement System -> Cannot access module due to the configuration.\nContact the Administrator for more information.");
+                return;
+            }
             // if(! new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("write"))
             // return;
 
