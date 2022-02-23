@@ -280,7 +280,8 @@ public class Loader
         switch(splitCmd[0].toLowerCase())
         {
             case "login":
-            break;
+                new Conch.Core.ConchLogic().startConch();
+                break;
 
             case "doc":
                 PrintStreams.printInfo("Help Document Viewer 1.0: WORK IN PROGRESS...");

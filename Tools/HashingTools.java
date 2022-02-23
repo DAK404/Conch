@@ -16,11 +16,17 @@ public class HashingTools
     private static int fileCount = 0;
     private static List<String> filePaths = new  ArrayList<String>();
 
+    static
+    {
+        System.out.println("Conch Hashing Tool");
+        System.out.println("DEBUG BUILD v0.2.5\n");
+    }
+
     public static void main(String[] Args)
     {
         try
         {
-            new File("./.Manifest").mkdir();
+            new File("./.Manifest/Conch").mkdirs();
             new HashingTools().enumerateFiles(new File("./"));
             new HashingTools().hashFiles();
         }
@@ -37,6 +43,9 @@ public class HashingTools
             File[] filesList = directory.listFiles();
             for (File f: filesList)
             {
+                if(ignoreFiles(f.getName()))
+                    continue;
+                    
                 if (f.isDirectory())
                 {
                     if(f.getName().equals(".Manifest"))
@@ -49,8 +58,6 @@ public class HashingTools
                 }
                 if (f.isFile()) 
                 {
-                    if(f.getName().equals("HashingTools.java"))
-                        continue;
                     String a = f.getPath();
                     filePaths.add(a);
                 }
@@ -62,19 +69,36 @@ public class HashingTools
         }
     }
 
+    private boolean ignoreFiles(String fileName)
+    {
+        boolean status = false;
+        String[] ignoreList = {".Manifest", "System", "Users", "org", "JRE", "BootShell.cmd"};
+        for(String files : ignoreList)
+        {
+            if(fileName.equalsIgnoreCase(files))
+            {
+                status = true;
+                break;
+            }
+        }
+        return status;
+    }
+
     private void hashFiles()
     {
         try
         {
-            System.out.println(File.separator);
-            String a = File.separator;
             Properties props = new Properties();
-            FileOutputStream output = new FileOutputStream("./.Manifest/Manifest.m1");
+            FileOutputStream output = new FileOutputStream("./.Manifest/Conch/Manifest.m1");
+            System.out.println(filePaths);
+
             for(String fileName: filePaths)
             {
-                //Receive the file name, hash it and compare it with the file list hashes
-                props.setProperty(fileName.replaceAll(a, Matcher.quoteReplacement("\\")), fileToMD5(fileName));
+                String temp = System.getProperty("os.name").contains("Linux")?fileName.replaceAll(File.separator, "\\\\"):fileName;
+                System.out.println(temp);
+                props.setProperty(temp, fileToMD5(fileName));
             }
+
             props.storeToXML(output, "FileManifest");
             output.close();
             System.gc();            

@@ -51,7 +51,7 @@ public class LoginAuth
         return retrieveDatabaseEntry("SELECT PIN FROM MUD WHERE Username = ?", "PIN");
     }
 
-    private String retrieveDatabaseEntry(String sqlCommand, String parameter)
+    private final String retrieveDatabaseEntry(String sqlCommand, String parameter)
     {
         String result = "DEFAULT_STRING";
         try
@@ -69,10 +69,11 @@ public class LoginAuth
 
             result = resultSet.getString(parameter);
 
-            resultSet.close();
+            
             preparedStatement.close();
             dbConnection.close();
-
+            resultSet.close();
+            
             System.gc();
         }
         catch(Exception e)
