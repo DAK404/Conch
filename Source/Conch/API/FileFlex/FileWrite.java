@@ -44,7 +44,7 @@ public class FileWrite
                 if(! logFile.exists())
                     logFile.mkdir();
 
-                BufferedWriter obj = new BufferedWriter(new FileWriter("./Logs" + fileName + ".log", true));
+                BufferedWriter obj = new BufferedWriter(new FileWriter("./Logs/" + fileName + ".log", true));
                 PrintWriter pr = new PrintWriter(obj);
                 pr.println(dateFormat.format(date) + ": " + PrintToFile);
                 pr.close();

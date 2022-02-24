@@ -67,14 +67,18 @@ public class UpdateLogic
 
     List <String> fileList;
 
-    public final void updateProgram()
+    public final void updateProgram(String usn)
     {
         boolean status = false;
         try
         {
             Console console = System.console();
-            // if(! new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("update"))
-            // return;
+
+            if(! new Conch.API.Oyster.PolicyEnforce().checkPolicy("update") & ! new Conch.API.Coral.LoginAuth(usn).checkPrivilegeLogic())
+        {
+            Conch.API.PrintStreams.printError("Policy Enforcement System -> Cannot access module due to the configuration.\nContact the Administrator for more information.");
+            return;
+        }
 
             BuildInfo.viewBuildInfo();
             PrintStreams.println(header);
@@ -100,7 +104,7 @@ public class UpdateLogic
                 return;
             }
 
-            if(console.readLine("Update Successful. Do you want to restart now?").equalsIgnoreCase("y"))
+            if(console.readLine("Update Successful. Do you want to restart now? [ Y | N ]\n> ").equalsIgnoreCase("y"))
                 System.exit(0x1A0002);
         }
         catch(Exception e)
@@ -177,7 +181,7 @@ public class UpdateLogic
 
                 //Print the file being extracted
                 PrintStreams.printInfo("Installed : " + newFile.getAbsoluteFile());
-                new Conch.API.FileFlex.FileWrite().logToFile("[ I ] : ", newFile.getCanonicalFile().toString());
+                new Conch.API.FileFlex.FileWrite().logToFile("[ I ] Installed : " + newFile.getCanonicalFile().toString(), "Update");
                 
                 //create all non exists folders
                 //else you will encounter FileNotFoundException

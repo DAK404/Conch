@@ -37,7 +37,7 @@ public class Setup
 
     private Console console = System.console();
 
-    public void setupLogic()
+    public void setupLogic()throws Exception
     {
         prerequisites();
         legal();
@@ -48,7 +48,7 @@ public class Setup
 
         PrintStreams.printAttention("Setup Complete. Do you want to check for updates? [Y | N ]");
         if(console.readLine("CHECK_UPDATE?> ").equalsIgnoreCase("y"))
-            new Conch.API.FileFlex.Parcel.UpdateLogic().updateProgram();
+            new Conch.API.FileFlex.Parcel.UpdateLogic().updateProgram(new Conch.API.Scorpion.Cryptography().stringToSHA3_256("Administrator"));
         
         System.exit(0x1A0001);
         
@@ -123,7 +123,7 @@ public class Setup
                 new Conch.API.FileFlex.FileRead().readManualDocument("Credits.txt");
             }
             else
-                System.exit(0x1A0100);
+                System.exit(-100);
 
             _legalAndInfo = "COMPLETE";
         }

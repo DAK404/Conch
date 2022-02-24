@@ -34,10 +34,10 @@ public class BuildInfo
     /_/   \\____|\\___/ |_| \\_| \\____||_| |_|  \\_\\
     """;
 
-    public static String _Version = "1.0.0";
-    public static String _BuildDate = "12-Feb-2022";
-    public static String _BuildID = "NION_12_FEB_22_2120_ALPHA";
-    public static String _BuildType = "ALPHA";
+    public static String _Version = "1.0.1";
+    public static String _BuildDate = "23-Feb-2022";
+    public static String _BuildID = "NION_23_FEB_22_2332";
+    public static String _BuildType = "Release";
 
     public static void viewBuildInfo()
     {

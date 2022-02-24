@@ -116,7 +116,7 @@ class ConchLogic
                     break;
 
                 case "update":
-                    new Conch.API.FileFlex.Parcel.UpdateLogic().updateProgram();
+                    new Conch.API.FileFlex.Parcel.UpdateLogic().updateProgram(_username);
                     break;
 
                 case "exit":
