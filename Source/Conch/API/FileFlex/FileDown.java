@@ -61,8 +61,6 @@ public class FileDown
         }
         catch(Exception E)
         {
-            //Handle any exceptions thrown during runtime
-            status = false;
             E.printStackTrace();
         }
         return status;
@@ -84,7 +82,7 @@ public class FileDown
         }
         catch (Exception E)
         {
-            status = false;
+            E.printStackTrace();
         }
         return status;
     }

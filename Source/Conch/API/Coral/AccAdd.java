@@ -40,8 +40,14 @@ public class AccAdd
 
     private Console console = System.console();
 
-    public void addAccount()throws Exception
+    public void addAccount(String usn)throws Exception
     {
+        if(! new Conch.API.Oyster.PolicyEnforce().checkPolicy("usermgmt") & ! new Conch.API.Coral.LoginAuth(usn).checkPrivilegeLogic())
+        {
+            Conch.API.PrintStreams.printError("Policy Enforcement System -> Cannot access module due to the configuration.\nContact the Administrator for more information.");
+            return;
+        }
+
         //main logic to add an account
         if(!login())
         {
@@ -50,6 +56,7 @@ public class AccAdd
         }
 
         _currentAccountAdmin = getAdminStatus();
+
         if(_currentAccountAdmin)
             grantAdminRights();
 
@@ -61,15 +68,14 @@ public class AccAdd
         boolean status = false;
         try
         {
-            _currentUsername = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(console.readLine("Username     :"));
-            String password = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password     :")));
-            String secKey = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key :")));
+            System.out.println("Username: ");
+            String password = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
+            String secKey = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
 
             status = new Conch.API.Coral.LoginAuth(_currentUsername).authenticationLogic(password, secKey);
         }
         catch(Exception e)
         {
-            e.printStackTrace();
             status = false;
         }
         return status;
@@ -125,7 +131,7 @@ public class AccAdd
 
         Account Name> """;
 
-        _newAccountName = console.readLine(message);
+        _newAccountName = console.readLine(message + " ");
 
         if(_newAccountName == null | _newAccountName.contains(" ") | _newAccountName.equals("") | !(_newAccountName.matches("^[a-zA-Z0-9]*$")) | _newAccountName.equalsIgnoreCase("Administrator") | _newAccountName.length() < 2)
         {
@@ -152,7 +158,7 @@ public class AccAdd
 
         Account Username> """;
 
-        _newAccountUsername = (console.readLine(message));
+        _newAccountUsername = (console.readLine(message + " "));
 
         if(_newAccountUsername == null | _newAccountUsername.equals("") | _newAccountUsername.equalsIgnoreCase("Administrator"))
         {

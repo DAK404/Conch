@@ -38,8 +38,6 @@ public class PolicyEnforce
             {
                 //If the policy value returned is false, print an error statement about the policy value
                 case "off":
-                Conch.API.PrintStreams.printAttention("Policy Enforcement System -> Cannot access module due to the configuration.\nContact the Administrator for more information.");
-                console.readLine();
                 break;
 
                 //Set the stat value as true if the policy value returned is true
@@ -62,7 +60,7 @@ public class PolicyEnforce
         }
         catch(Exception E)
         {
-            E.printStackTrace();
+            stat = false;
         }
         return stat;
     }

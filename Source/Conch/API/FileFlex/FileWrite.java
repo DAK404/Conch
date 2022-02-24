@@ -85,13 +85,11 @@ public class FileWrite
     {
         try
         {
-            if(! new Conch.API.Oyster.PolicyEnforce().checkPolicy("write") & ! new Conch.API.Coral.LoginAuth(usn).checkPrivilegeLogic())
+            if(! new Conch.API.Oyster.PolicyEnforce().checkPolicy("edit") & ! new Conch.API.Coral.LoginAuth(usn).checkPrivilegeLogic())
             {
                 Conch.API.PrintStreams.printError("Policy Enforcement System -> Cannot access module due to the configuration.\nContact the Administrator for more information.");
                 return;
             }
-            // if(! new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("write"))
-            // return;
 
             if(checkFileValidity(fileName))
             {

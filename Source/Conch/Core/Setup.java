@@ -141,7 +141,7 @@ public class Setup
             displayStatus();
             PrintStreams.printInfo("Creating Directories...");
 
-            String[] fileList = {"./System/Conch/Public", "./System/Conch/Private", "./Users/Conch"};
+            String[] fileList = {"./System/Conch/Public", "./System/Conch/Private", "./Users/Conch", "./Logs"};
             for(String files:fileList)
                 PrintStreams.printAttention(files + (new File(files).mkdirs()?" Created":" Already Exists. Skipping..."));
 

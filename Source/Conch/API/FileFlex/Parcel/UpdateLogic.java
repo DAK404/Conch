@@ -177,6 +177,7 @@ public class UpdateLogic
 
                 //Print the file being extracted
                 PrintStreams.printInfo("Installed : " + newFile.getAbsoluteFile());
+                new Conch.API.FileFlex.FileWrite().logToFile("[ I ] : ", newFile.getCanonicalFile().toString());
                 
                 //create all non exists folders
                 //else you will encounter FileNotFoundException

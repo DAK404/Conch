@@ -82,8 +82,7 @@ public final class FileRead
                 Conch.API.PrintStreams.printError("Policy Enforcement System -> Cannot access module due to the configuration.\nContact the Administrator for more information.");
                 return;
             }
-            // if(! new Truncheon.API.Minotaur.PolicyEnforcement().checkPolicy("read") )
-            // return;
+            
             if(checkFileValidity(fileName))
             {
                 file = new File( dir + fileName);

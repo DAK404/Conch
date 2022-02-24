@@ -50,7 +50,7 @@ public class AccDel
         }
         else
         {
-            if(console.readLine("Are you sure you wish to delete your user account?").equalsIgnoreCase("yes"))
+            if(console.readLine("Are you sure you wish to delete your user account? [ YES | NO ]\n> ").equalsIgnoreCase("yes"))
             {
                 deleteFromDatabase();
                 PrintStreams.printAttention("Account Successfully Deleted. Press ENTER to continue.");
@@ -69,8 +69,8 @@ public class AccDel
         try
         {
             System.out.println("Username: " + new Conch.API.Coral.LoginAuth(_currentUsername).getNameLogic());
-            String password = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password     :")));
-            String secKey = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key :")));
+            String password = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
+            String secKey = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
 
             status = new Conch.API.Coral.LoginAuth(_currentUsername).authenticationLogic(password, secKey);
         }

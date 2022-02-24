@@ -135,6 +135,53 @@ class ConchLogic
                     new Conch.API.Oyster.PolicyEditor().policyManager();
                     break;
 
+                case "echo":
+                    if(cmdArr.length < 2)
+                        PrintStreams.printAttention("Syntax: echo <string>");
+                    else
+                        PrintStreams.println(cmdArr[1]);
+                    break;
+
+                case "syshell":
+                    if(! _admin)
+                        PrintStreams.printError("SYSHELL not available to standard users! Aborting...");
+                    else
+                    {
+                        try
+                        {
+                            if(System.getProperty("os.name").contains("Windows"))
+                                new ProcessBuilder("cmd").inheritIO().start().waitFor();
+                            else
+                                new ProcessBuilder("/bin/bash").inheritIO().start().waitFor();
+                        }
+                        catch(Exception e)
+                        {
+                            PrintStreams.printError("SYSTEM SHELL ERROR!");
+                            PrintStreams.printError("Error Details: " + e.getStackTrace().toString());
+                        }
+                    }
+                    break;
+
+                case "sys":
+                    if(! _admin)
+                        PrintStreams.printError("SYS not available to standard users! Aborting...");
+                    else
+                    {
+                        try
+                        {
+                            if(System.getProperty("os.name").contains("Windows"))
+                                new ProcessBuilder("cmd", "/c", cmdArr[1]).inheritIO().start().waitFor();
+                            else
+                                new ProcessBuilder("/bin/bash", "-c" , cmdArr[1]).inheritIO().start().waitFor();
+                        }
+                        catch(Exception e)
+                        {
+                            PrintStreams.printError("SYSTEM SHELL ERROR!");
+                            PrintStreams.printError("Error Details: " + e.getStackTrace().toString());
+                        }
+                    }
+                    break;
+
                 case "":
                     break;
 
@@ -150,11 +197,15 @@ class ConchLogic
                     switch(cmdArr[1])
                     {
                         case "add":
-                            new Conch.API.Coral.AccAdd().addAccount();
+                            new Conch.API.Coral.AccAdd().addAccount(_username);
                             break;
 
                         case "delete":
                             new Conch.API.Coral.AccDel().userDeletionLogic(_username);
+                            break;
+
+                        case "modify":
+                            new Conch.API.Coral.AccMod().modifyAccount(_username);
                             break;
                     }
                     break;

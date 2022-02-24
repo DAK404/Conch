@@ -237,7 +237,7 @@ public class FlexLogic
             // --------------------------------------------------------- //
 
             case "read":
-                if(cmd.length < 1)
+                if(cmd.length < 2)
                 {
                     PrintStreams.printError(ARGUMENT_MISMATCH);
                     PrintStreams.printAttention("Syntax:\nread <file_name>");
@@ -247,13 +247,23 @@ public class FlexLogic
                 break;
 
             case "write":
-                if(cmd.length < 1)
+                if(cmd.length < 2)
                 {
                     PrintStreams.printError(ARGUMENT_MISMATCH);
                     PrintStreams.printAttention("Syntax:\nwrite <file_name>");
                 }
                 else
                     new Conch.API.FileFlex.FileWrite().editFile(cmd[1], _currentDirectory, _username);
+                break;
+
+            case "download":
+                if(cmd.length < 3)
+                {
+                    PrintStreams.printError(ARGUMENT_MISMATCH);
+                    PrintStreams.printAttention("Syntax:\ndownload <URL> <Filename>");
+                }
+                else
+                    new Conch.API.FileFlex.FileDown().downloadFile(cmd[1], _currentDirectory + cmd[2]);
                 break;
 
             case "":
