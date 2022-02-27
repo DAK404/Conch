@@ -98,7 +98,7 @@ public class FlexLogic
 
     private boolean authPolicy()throws Exception
     {
-        System.out.println("Username: " + _name);
+        System.out.println("Username: " + new Conch.API.Coral.LoginAuth(_username).getNameLogic());
         return new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("PIN: "))).equals(new Conch.API.Coral.LoginAuth(_username).getPINLogic());
     }
 

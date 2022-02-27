@@ -51,10 +51,10 @@ public class AccAdd
         _currentUsername = usn;
 
         //main logic to add an account
-        if(!login())
+        if(new Conch.API.Oyster.PolicyEnforce().checkPolicy("usermgmt"))
         {
-            Conch.API.PrintStreams.printError("Invalid Credentials. Aborting...");
-            return;
+            if(! authPolicy())
+                return;
         }
 
         _currentAccountAdmin = getAdminStatus();
@@ -65,22 +65,10 @@ public class AccAdd
         getAccountDetails();        
     }
 
-    private boolean login()
+    private boolean authPolicy()throws Exception
     {
-        boolean status = false;
-        try
-        {
-            System.out.println("Username: " + new Conch.API.Coral.LoginAuth(_currentUsername).getNameLogic());
-            String password = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
-            String secKey = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
-
-            status = new Conch.API.Coral.LoginAuth(_currentUsername).authenticationLogic(password, secKey);
-        }
-        catch(Exception e)
-        {
-            status = false;
-        }
-        return status;
+        System.out.println("Username: " + _currentUsername);
+        return new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("PIN: "))).equals(new Conch.API.Coral.LoginAuth(_currentUsername).getPINLogic());
     }
 
     private boolean getAdminStatus()throws Exception
