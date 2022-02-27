@@ -77,8 +77,13 @@ public class FlexLogic
         _username = usn;
         _name = new Conch.API.Coral.LoginAuth(_username).getNameLogic();
 
-        if(!login())
-            return;
+        if(new Conch.API.Oyster.PolicyEnforce().checkPolicy("reqAuth"))
+        {
+            if(! authPolicy())
+                return;
+        }
+
+        _currentDirectory = "./Users/Conch/" + _username + '/';
 
         String temp;
 
@@ -91,31 +96,10 @@ public class FlexLogic
         }while(!temp.equalsIgnoreCase("exit"));
     }
 
-    private final boolean login()throws Exception
+    private boolean authPolicy()throws Exception
     {
-        boolean status = false;
-        try
-        {
-            System.out.println("Username: " + _name);
-            String password = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
-            String securityKey = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(console.readLine("Security Key: "));
-
-            if(! new Conch.API.Coral.LoginAuth(_username).authenticationLogic(password, securityKey))
-            {
-                PrintStreams.printError("Authentication Failed. FileFlex Access Denied.");
-                status = false;
-            }
-            else
-            {
-                status = true;
-                _currentDirectory = "./Users/Conch/" + _username + '/';
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        return status;
+        System.out.println("Username: " + _name);
+        return new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("PIN: "))).equals(new Conch.API.Coral.LoginAuth(_username).getPINLogic());
     }
 
     private void fileFlexLogic(String input)throws Exception

@@ -111,11 +111,11 @@ public final class FileRead
 
         //This checks if the file doesn't exist. If it doesn't exist, the error text is shown on terminal.
         if (! file.exists())
-        System.out.println("[ ERROR ] : Unable to locate file: The specified file cannot be read, found or loaded.");
+        System.out.println("[ ERROR ] : Unable to locate file: The specified file " + file.getName() +" cannot be read, found or loaded.");
 
         //This checks if the filename points to a directory
         else if (file.isDirectory())
-        System.out.println("[ ERROR ] : Unable to read file : The specified file name is a directory.");
+        System.out.println("[ ERROR ] : Unable to read file : The specified file name " + file.getName() + " is a directory.");
 
         //If the file exists, the file is displayed on the terminal.
         else

@@ -27,19 +27,21 @@ import Conch.API.PrintStreams;
 
 public class PolicyEditor 
 {
-    private final String[] _resetValues = {"update", "download", "fileflex", "read", "edit", "usermgmt"};
+    private final String[] _resetValues = {"update", "download", "fileflex", "reqAuth" , "read", "edit", "usermgmt"};
     private final String _policyFileName = "./System/Conch/Private/Policy.burn";
     private String _currentUsername = "";
 
     private Console console = System.console();
     private Properties props = null;
 
-    public void policyManager()throws Exception
+    public void policyManager(String usn)throws Exception
     {
-        if(!login())
+        _currentUsername = usn;
+
+        if(new Conch.API.Oyster.PolicyEnforce().checkPolicy("reqAuth"))
         {
-            PrintStreams.printError("Invalid Credentials. Aborting...");
-            return;
+            if(! authPolicy())
+                return;
         }
 
         if(!getAdminStatus())
@@ -51,23 +53,10 @@ public class PolicyEditor
         policyEditorLogic();
     }
 
-    private boolean login()
+    private boolean authPolicy()throws Exception
     {
-        boolean status = false;
-        try
-        {
-            _currentUsername = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(console.readLine("Username     :"));
-            String password = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password     :")));
-            String secKey = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key :")));
-
-            status = new Conch.API.Coral.LoginAuth(_currentUsername).authenticationLogic(password, secKey);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            status = false;
-        }
-        return status;
+        System.out.println("Username: " + new Conch.API.Coral.LoginAuth(_currentUsername).getNameLogic());
+        return new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("PIN: "))).equals(new Conch.API.Coral.LoginAuth(_currentUsername).getPINLogic());
     }
 
     private boolean getAdminStatus()throws Exception

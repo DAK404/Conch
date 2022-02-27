@@ -48,6 +48,8 @@ public class AccAdd
             return;
         }
 
+        _currentUsername = usn;
+
         //main logic to add an account
         if(!login())
         {
@@ -68,7 +70,7 @@ public class AccAdd
         boolean status = false;
         try
         {
-            System.out.println("Username: ");
+            System.out.println("Username: " + new Conch.API.Coral.LoginAuth(_currentUsername).getNameLogic());
             String password = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Password: ")));
             String secKey = new Conch.API.Scorpion.Cryptography().stringToSHA3_256(String.valueOf(console.readPassword("Security Key: ")));
 

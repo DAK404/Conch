@@ -132,7 +132,7 @@ class ConchLogic
                     break;
 
                 case "policy":
-                    new Conch.API.Oyster.PolicyEditor().policyManager();
+                    new Conch.API.Oyster.PolicyEditor().policyManager(_username);
                     break;
 
                 case "echo":
