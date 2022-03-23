@@ -70,12 +70,12 @@ public class Loader
                 System.exit(0x1A0000);
         }
 
+        if(!new Loader().integrityCheck())
+        System.exit(0x1A0104);
+
         if(!new Loader().systemAsserts())
             new Conch.Core.Setup().setupLogic();
         
-        if(!new Loader().integrityCheck())
-            System.exit(0x1A0104);
-
         new Loader().debugShell();
     }
 

@@ -1,51 +1,49 @@
-       Conch v1.0.1
-------------------------
-Updated On : 23-Feb-2022
-------------------------
+Conch Readme
 
-CONTENTS
- * Introduction
- * System Requirements
- * Contact Information
+Time to read: 10 Minutes
+Updated on  : 05-March-2022
 
+--------------------------------
 
-------------------------
-Introduction
+Contents:
 
-Conch is an lightweight, cross-platform and open source shell
-which is aimed to simplify the CLI experience across multiple
-OSes and devices.
+ A) INTRODUCTION
+ B) LEGAL/IMPORTANT INFORMATION
+ C) OBTAINING CONCH
+ D) INSTALLATION
+ E) FAQ
+ F) CREDITS AND CHANGELOG
 
-This shell is aimed at the users who are learning or with novice
-experience in the CLI. Advanced users can take advantage with the
-shell, features and the commands.
+--------------------------------
+<end of page>
+--------------------------------
+A) INTRODUCTION
 
-------------------------
-System Requirements
+Conch is a shell written in Java to provide a cross-platform CLI
+experience which is aimed at the novice users to get accustomed
+to use a command line interface with ease.
 
-Minimum Hardware Requirements:
- * x64 processor clocked at atleast 2.3 GHz (Intel Core 2 Duo or Equivalent Processor)
- * 4GB of DDR3 RAM or better
- * 25GB of Hard drive space or higher
+Its command structure and syntax is similar to Linux and Windows.
+Users can easily do the same tasks on multiple platforms with
+ease and least amount of changes.
 
-Recommended Hardware Requirements
- * x64 processor clocked at atleast 3.3 GHz (Intel Core i3-3210 or Equivalent Processor)
- * 8GB of DDR3/DDR4 RAM or better
- * 100GB of Hard Drive space or higher
+--------------------------------
+B) LEGAL/IMPORTANT INFORMATION
 
-NOTE: Conch can run on the following configurations - 
- * Any OS which supports Java.
- * Any OS which has a file system environment for file read and write access.
- * OS which supports running command line applications.
- * NTFS/EXT4/FAT/FAT32/exFAT file system supported
+CONCH IS A FREE AND OPEN SOURCE SOFTWARE. ANY MODIFICATIONS OR
+REDISTRIBUTION OF THE SOFTWARE NEEDS TO INCORPORATE THE SOURCE
+CODE INCLUDED THE MODIFICATIONS.
 
-------------------------
-Contact Information
+THIS SOURCE CODE FOLLOWS THE GPL 3.0 LICENSE. THE SAME INFORMATION
+CAN BE FOUND IN THE LICENSE FILE.
 
-Repository : https://github.com/DAK404/Conch
-Users:
-https://github.com/DAK404
-https://github.com/srikanthkp23
+BY USING THIS SOFTWARE, YOU HEREBY AGREE TO THE TERMS OF THE
+GPL LICENSE. ADDITIONALLY, NO DATA IS SENT TO ANY SERVER. THE
+SOFTWARE UPDATES ARE DESIGNED TO ONLY DOWNLOAD THE LATEST FROM
+GITHUB, WHICH IS AVAILABLE AT THE FREE OF COST.
 
-------------------------
-[ END OF FILE ]
+--------------------------------
+<end of page>
+--------------------------------
+C) OBTAINING CONCH
+

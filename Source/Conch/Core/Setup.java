@@ -74,10 +74,10 @@ public class Setup
         System.out.println(message);
     }
 
-    private void prerequisites()
+    private void prerequisites()throws Exception
     {
         String output = """
-        Welcome to Conch!
+        \nWelcome to Conch!
 
         The shell needs to be setup before it can be used.
 
@@ -87,29 +87,33 @@ public class Setup
         * If you are a normal user, please contact the Administrator for help.
         * The shell cannot be used until the setup is complete.
 
-        The following steps will be taken to setup the Conch shell:
+        The following steps will be taken to setup Conch:
 
         ---------------------------------------
         |          SETUP INFORMATION          |
         ---------------------------------------
-            A. LEGAL AND IMPORTANT INFORMATION
-        \t1. EULA [END USER LICENSE AGREEMENT]
-        \t2. Readme
-        \t3. What's New!
-            C. Create Truncheon Dependencies
-        \t1. Create Truncheon Directories
-        \t2. Create Multi User Database
-        \t3. Create Administrator Account
-            D. INITIALIZE THE SYSTEM NAME
-            E. INITIALIZE PROGRAM POLICIES
-            F. CHECK FOR UPDATES
-            G. END SETUP
-        \n---------------------------------------
 
-        To exit the setup, press the CTRL + C keys. Else, press ENTER key.
+        A. LEGAL AND IMPORTANT INFORMATION
+           1. EULA [END USER LICENSE AGREEMENT]
+           2. Readme
+           3. What's New!
+
+        B. Create Truncheon Dependencies
+           1. Create Truncheon Directories
+           2. Create Multi User Database
+           3. Create Administrator Account
+
+        C. INITIALIZE PROGRAM POLICIES
+        D. CHECK FOR UPDATES
+        E. END SETUP
+
+        ---------------------------------------
+
+        To exit the setup, type \'EXIT\' or press the CTRL + C keys.\nElse, press ENTER key to continue.
         """;
 
-        console.readLine(output + "DEFAULT@SETUP_MODE> ");
+        if(console.readLine(output + "DEFAULT@SETUP_MODE> ").equalsIgnoreCase("exit"))
+            System.exit(0);
     }
 
     private void legal()
@@ -118,10 +122,8 @@ public class Setup
         {
             new Conch.API.FileFlex.FileRead().readManualDocument("EULA.txt");
             if(console.readLine("EULA?> ").equalsIgnoreCase("y"))
-            {
                 new Conch.API.FileFlex.FileRead().readManualDocument("Readme.txt");
-                new Conch.API.FileFlex.FileRead().readManualDocument("Credits.txt");
-            }
+
             else
                 System.exit(-100);
 
