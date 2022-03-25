@@ -124,7 +124,7 @@ class ConchLogic
                     break;
 
                 case "restart":
-                    System.exit(0x1A0001);
+                    System.exit(3);
                     break;
 
                 case "clear":

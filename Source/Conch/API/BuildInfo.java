@@ -34,9 +34,9 @@ public class BuildInfo
     /_/   \\____|\\___/ |_| \\_| \\____||_| |_|  \\_\\
     """;
 
-    public static String _Version = "1.0.1";
-    public static String _BuildDate = "23-Feb-2022";
-    public static String _BuildID = "NION_23_FEB_22_2332";
+    public static String _Version = "1.0.3";
+    public static String _BuildDate = "25-Mar-2022";
+    public static String _BuildID = "NION_25_Mar_22_2322";
     public static String _BuildType = "Release";
 
     public static void viewBuildInfo()
@@ -45,10 +45,10 @@ public class BuildInfo
         {
             clearScreen();
             System.out.println(_Branding);
-            System.out.println(" Prototype Build v" + _Version);
-            System.out.println(" Build Date : " + _BuildDate);
-            System.out.println(" Build ID   : " + _BuildID);
-            System.out.println(" Build Type : " + _BuildType);
+            System.out.println(" Build Version : " + _Version);
+            System.out.println(" Build Date    : " + _BuildDate);
+            System.out.println(" Build ID      : " + _BuildID);
+            System.out.println(" Build Type    : " + _BuildType);
             System.out.println("--------------------------------------------\n");
         }
         catch(Exception e)

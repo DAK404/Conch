@@ -119,20 +119,18 @@ public class Main
                 System.exit(1);
                 
                 // KERNEL RELATED EXIT CASES //
-                
-                case 0x1A0000:
+                case 2:
                 System.err.println(errorHeader + UNDEFINED_BOOTMODE + errorFooter);
                 System.in.read();
                 System.exit(2);
                 
-                case 0x1A0001:
+                case 3:
                 System.out.println("Restarting...");
                 break;
                 
-                case 0x1A0002:
+                case 4:
                 System.err.println(errorHeader + RESTART_UPDATE + errorFooter);
-                args[1] = "update";
-                System.exit(4);
+                break;
                 
                 /* Reserved for future implementations
                 case 0x1A0004:
@@ -140,18 +138,17 @@ public class Main
                 */
                 
                 // KERNEL RELATED ERROR EXIT CASES //
-                
-                case 0x1A0100:
+                case 5:
                 System.err.println(errorHeader + FATAL_ERROR_EXIT + errorFooter);
                 System.in.read();
                 System.exit(3);
                 
-                case 0x1A0102:
+                case 6:
                 System.err.println(errorHeader + FATAL_ERROR_RESTART + errorFooter);
                 System.in.read();
                 break;
                 
-                case 0x1A0104:
+                case 7:
                 System.err.println(errorHeader + AUTOMATIC_REPAIR_MODE + errorFooter);
                 args[1] = "repair";
                 break;

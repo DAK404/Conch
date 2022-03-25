@@ -45,12 +45,13 @@ public class Setup
         initializeDatabase();
         initializeAdminAccount();
         initializePolicies();
-
+        
+        displayStatus();
         PrintStreams.printAttention("Setup Complete. Do you want to check for updates? [Y | N ]");
         if(console.readLine("CHECK_UPDATE?> ").equalsIgnoreCase("y"))
             new Conch.API.FileFlex.Parcel.UpdateLogic().updateProgram(new Conch.API.Scorpion.Cryptography().stringToSHA3_256("Administrator"));
         
-        System.exit(0x1A0001);
+        System.exit(4);
         
     }
 
@@ -63,11 +64,11 @@ public class Setup
         CONCH SETUP CHECKLIST
         =====================
 
-        1. Legal and Important Information    : """ + _legalAndInfo + """
-        \n2. Initialize Conch Dependencies      : """ + _createDirectories + """
-        \n3. Initialize Database Files          : """ + _initializeDatabase + """
-        \n4. Administrator Account Creation     : """ + _initializeAdminAccount + """
-        \n5. Initialize Policies and BURN Files : """ + _initializePolicies + """
+        1. Legal and Important Information    :  """ + _legalAndInfo + """
+        \n2. Initialize Conch Dependencies      :  """ + _createDirectories + """
+        \n3. Initialize Database Files          :  """ + _initializeDatabase + """
+        \n4. Administrator Account Creation     :  """ + _initializeAdminAccount + """
+        \n5. Initialize Policies and BURN Files :  """ + _initializePolicies + """
 
         =====================""";
         

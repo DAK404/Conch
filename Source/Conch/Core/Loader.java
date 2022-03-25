@@ -64,14 +64,14 @@ public class Loader
 
             case "repair":
                 new Loader().repairMode();                
-                System.exit(0xAFF014);
+                System.exit(3);
                 
             default:
-                System.exit(0x1A0000);
+                System.exit(2);
         }
 
         if(!new Loader().integrityCheck())
-        System.exit(0x1A0104);
+            System.exit(7);
 
         if(!new Loader().systemAsserts())
             new Conch.Core.Setup().setupLogic();
@@ -116,10 +116,8 @@ public class Loader
                     deleteExistingBinaries(new File("./Conch"));
 
                     if(downloadBuildFromCloud())
-                        if(installBuild())
-                            System.out.println("Restore Complete.");
-                        else
-                            System.out.println("Restore Failed.");
+                        System.out.println(installBuild()?"Restore Complete.":"Restore Failed.");
+
                     else
                         System.out.println("Download Failed.");
 
@@ -295,7 +293,7 @@ public class Loader
                 System.exit(0);
 
             case "restart":
-                System.exit(0x1A0001);
+                System.exit(3);
 
             case "":
                 break;

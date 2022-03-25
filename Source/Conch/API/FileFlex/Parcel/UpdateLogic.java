@@ -75,10 +75,10 @@ public class UpdateLogic
             Console console = System.console();
 
             if(! new Conch.API.Oyster.PolicyEnforce().checkPolicy("update") & ! new Conch.API.Coral.LoginAuth(usn).checkPrivilegeLogic())
-        {
-            Conch.API.PrintStreams.printError("Policy Enforcement System -> Cannot access module due to the configuration.\nContact the Administrator for more information.");
-            return;
-        }
+            {
+                Conch.API.PrintStreams.printError("Policy Enforcement System -> Cannot access module due to the configuration.\nContact the Administrator for more information.");
+                return;
+            }
 
             BuildInfo.viewBuildInfo();
             PrintStreams.println(header);
@@ -105,7 +105,7 @@ public class UpdateLogic
             }
 
             if(console.readLine("Update Successful. Do you want to restart now? [ Y | N ]\n> ").equalsIgnoreCase("y"))
-                System.exit(0x1A0002);
+                System.exit(4);
         }
         catch(Exception e)
         {
