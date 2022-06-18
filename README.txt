@@ -3,6 +3,21 @@
 Updated On : 23-Feb-2022
 ------------------------
 
+------------------------
+ATTENTION:
+
+REPOSITORY HAS BEEN ARCHIVED!
+The new changes and implementations 
+have been carried over to Truncheon.
+Please check that repository out for
+a more matured code base. This code
+shall not be maintained and will not
+receive any updates.
+
+Thank you.
+------------------------
+
+
 CONTENTS
  * Introduction
  * System Requirements
